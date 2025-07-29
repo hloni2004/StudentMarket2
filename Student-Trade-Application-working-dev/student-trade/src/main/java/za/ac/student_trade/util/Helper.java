@@ -2,19 +2,33 @@ package za.ac.student_trade.util;
 
 import org.apache.commons.validator.routines.EmailValidator;
 
+import java.util.UUID;
+
 public class Helper {
 
-    public static boolean ValidString(String str) {
-        return str != null && !str.isEmpty();
+    public static String generateId(){return UUID.randomUUID().toString();}
+
+    //Todo: Validate Email
+
+    public static boolean isValidEmail(String email){
+        return  EmailValidator.getInstance().isValid(email);
     }
-    public static boolean ValidInteger(Integer i) {
-        return i != null && i > 0;
+
+    //Todo: Validate Price > 0
+    //Todo: firstName, lastName, email, and password is not Null
+
+    public static boolean isNullOrEmpty(String s){
+        if(s.isEmpty() || s == null){
+            return true;
+        }
+        return false;
     }
-    public static boolean validEmail(String email) {
-        EmailValidator validator = EmailValidator.getInstance();
-        return  validator.isValid(email);
+    //Todo: validate postal code > 999 && postal code < 10000
+    public static boolean postalCodeValid(int postalCode){
+        if(postalCode > 999 || postalCode < 1000){
+            return true;
+        }
+        return false;
     }
-    public static boolean validLong(long value) {
-        return value > 0;
-    }
+
 }
