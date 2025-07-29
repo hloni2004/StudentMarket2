@@ -9,8 +9,7 @@ import java.util.List;
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long studentId;
+    protected String studentId;
 
     @Column(name = "first_name", nullable = false)
     protected String firstName;
@@ -25,30 +24,31 @@ public class Student {
     protected String password;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id")
-    protected Address address;
+    @JoinColumn(name = "residence_id")
+    protected Residence residence;
 
     @OneToMany(mappedBy = "seller")
-    private List<Product> productForSale;
+    protected List<Product> productForSale;
 
     @OneToMany(mappedBy = "buyer")
-    private List<Transaction> purchases;
+    protected List<Transaction> purchases;
 
 
     protected Student() {}
 
-    private Student(Builder builder) {
+    public Student(Builder builder) {
+        this.studentId = builder.studentId;
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
         this.email = builder.email;
         this.password = builder.password;
-        this.address = builder.address;
+        this.residence = builder.residence;
         this.productForSale = builder.productForSale;
         this.purchases = builder.purchases;
 
     }
 
-    public Long getStudentId() {
+    public String getStudentId() {
         return studentId;
     }
 
@@ -68,8 +68,8 @@ public class Student {
         return password;
     }
 
-    public Address getAddress() {
-        return address;
+    public Residence getResidence() {
+        return residence;
     }
 
     public List<Product> getProductForSale() {
@@ -88,23 +88,28 @@ public class Student {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", address=" + address +
-                ", productForSale=" + productForSale +
+                ", address=" + residence + '\'' +
+                ", productForSale=" + productForSale + '\'' +
                 ", purchases=" + purchases +
                 '}';
     }
 
+//    public void setStudentId(String studentId) {
+//        this.studentId = studentId;
+//    }
+
+
     public static class Builder {
-        private Long studentId;
+        private String studentId;
         private String firstName;
         private String lastName;
         private String email;
         private String password;
-        private Address address;
+        private Residence residence;
         private List<Product> productForSale;
         private List<Transaction> purchases;
 
-        public Builder setStudentId(Long studentId) {
+        public Builder setStudentId(String studentId) {
             this.studentId = studentId;
             return this;
         }
@@ -129,8 +134,8 @@ public class Student {
             return this;
         }
 
-        public Builder setAddress(Address address) {
-            this.address = address;
+        public Builder setResidence(Residence residence) {
+            this.residence = residence;
             return this;
         }
 
@@ -150,7 +155,7 @@ public class Student {
             this.lastName = student.getLastName();
             this.email = student.getEmail();
             this.password = student.getPassword();
-            this.address = student.getAddress();
+            this.residence = student.getResidence();
             this.productForSale = student.getProductForSale();
             this.purchases = student.getPurchases();
             return this;
@@ -162,7 +167,7 @@ public class Student {
             this.lastName = student.lastName;
             this.email = student.email;
             this.password = student.password;
-            this.address = student.address;
+            this.residence = student.residence;
             this.productForSale = student.productForSale;
             this.purchases = student.purchases;
             return this;
