@@ -16,15 +16,8 @@ public class ResidenceFactory {
         (!Helper.ValidInteger(floorNumber)) {
             return null;
         }
-        if
-        (!Helper.validLong(residenceId)) {
-            return null;
-        }
 
-
-        residenceId = new Random().nextLong();
         return new Residence.Builder()
-                .setResidenceId(residenceId)
                 .setResidenceName(residenceName)
                 .setRoomNumber(roomNumber)
                 .setFloorNumber(floorNumber)

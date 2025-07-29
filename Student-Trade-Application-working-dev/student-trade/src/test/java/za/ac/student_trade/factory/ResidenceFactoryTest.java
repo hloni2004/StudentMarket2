@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class ResidenceFactoryTest {
 
 
-        private static Residence residence = ResidenceFactory.createResidence(ThreadLocalRandom.current().nextLong(), "New Market Junction", "367", 3, "C Block");
-        public static Residence res = ResidenceFactory.createResidence(ThreadLocalRandom.current().nextLong(), "New Market Junction", "", 3, "C Block");
+        private static Residence residence = ResidenceFactory.createResidence(null, "New Market Junction", "367", 3, "C Block");
+        private static Residence res = ResidenceFactory.createResidence(null, "New Market Junction", "", 3, "C Block");
 
         @Test
         void testCreateResidence() {

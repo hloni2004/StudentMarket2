@@ -18,7 +18,7 @@ public class Residence {
     @Column(name = "building")
     protected String buildingName;
 
-    protected Residence() {}
+    public Residence() {}
 
     protected Residence(Builder builder) {
         this.residenceId = builder.residenceId;
