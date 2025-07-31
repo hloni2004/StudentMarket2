@@ -38,6 +38,6 @@ public class ResidenceServiceImpl implements ResidenceService <Residence, Long> 
 
     @Override
     public List<Residence> getAll() {
-        return List.of();
+        return residenceRepository.findAll();
     }
 }
