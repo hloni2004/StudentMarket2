@@ -9,11 +9,7 @@ public class ResidenceFactory {
 
     public static Residence createResidence(Long residenceId,String residenceName, String roomNumber, int floorNumber, String buildingName) {
         if
-        (!Helper.ValidString(residenceName) || !Helper.ValidString(roomNumber) || !Helper.ValidString(buildingName)) {
-            return null;
-        }
-        if
-        (!Helper.ValidInteger(floorNumber)) {
+        (Helper.isNullOrEmpty(residenceName) || Helper.isNullOrEmpty(roomNumber) || Helper.isNullOrEmpty(buildingName)) {
             return null;
         }
 

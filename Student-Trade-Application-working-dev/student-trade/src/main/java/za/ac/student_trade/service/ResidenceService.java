@@ -16,6 +16,8 @@ public interface ResidenceService<T, ID> {
 
 
     List<Residence> getAll();
+
+
 }
 
 
