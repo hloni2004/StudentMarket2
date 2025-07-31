@@ -94,10 +94,6 @@ public class Student {
                 '}';
     }
 
-//    public void setStudentId(String studentId) {
-//        this.studentId = studentId;
-//    }
-
 
     public static class Builder {
         private String studentId;
@@ -172,9 +168,10 @@ public class Student {
             this.purchases = student.purchases;
             return this;
         }
-
         public Student build() {
             return new Student(this);
         }
     }
+
+
 }

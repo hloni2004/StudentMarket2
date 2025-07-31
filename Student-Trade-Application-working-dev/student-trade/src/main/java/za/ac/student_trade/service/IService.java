@@ -16,4 +16,5 @@ public interface IService<T,ID>{
 
 //    //find all the students
 //    List<T> getAll();
+
 }
