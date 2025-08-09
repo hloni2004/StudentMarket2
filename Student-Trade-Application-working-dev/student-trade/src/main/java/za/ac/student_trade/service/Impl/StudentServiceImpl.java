@@ -3,12 +3,12 @@ package za.ac.student_trade.service.Impl;
 import org.springframework.stereotype.Service;
 import za.ac.student_trade.domain.Student;
 import za.ac.student_trade.repository.StudentRepository;
-import za.ac.student_trade.service.IService;
+import za.ac.student_trade.service.IStudentService;
 
 import java.util.List;
 
 @Service
-public class StudentServiceImpl implements IService<Student, String> {
+public class StudentServiceImpl implements IStudentService{
 
     private final StudentRepository studentRepository;
 
@@ -22,9 +22,10 @@ public class StudentServiceImpl implements IService<Student, String> {
     }
 
     @Override
-    public Student read(String id) {
-        return this.studentRepository.findById(id).orElse(null);
+    public Student read(String s) {
+        return this.studentRepository.findById(s).orElse(null);
     }
+
 
     @Override
     public Student update(Student student) {
@@ -34,5 +35,10 @@ public class StudentServiceImpl implements IService<Student, String> {
     @Override
     public List<Student> getAll(){
         return this.studentRepository.findAll();
+    }
+
+    @Override
+    public List<Student> findByEmail(String email) {
+        return this.studentRepository.findByEmail(email);
     }
 }

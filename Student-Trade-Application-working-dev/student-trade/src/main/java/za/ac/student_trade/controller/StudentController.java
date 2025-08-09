@@ -1,41 +1,41 @@
 package za.ac.student_trade.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import za.ac.student_trade.domain.Student;
-import za.ac.student_trade.service.IService;
 import za.ac.student_trade.service.Impl.StudentServiceImpl;
 
+import java.util.List;
+
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/students")
 public class StudentController {
 
-
-    private StudentServiceImpl service;
+    private StudentServiceImpl studentService;
 
     @Autowired
-    public void setStudentService(StudentServiceImpl service) {
-        this.service = service;
+    public void setStudentService(StudentServiceImpl studentService) {
+        this.studentService = studentService;
     }
 
-    //<< --CRUD methods start -->>
     @PostMapping("/create")
-    public Student create(@RequestBody Student student) {
-        return this.service.create(student);
+    public Student createStudent(@RequestBody Student student) {
+        return this.studentService.create(student);
     }
 
     @GetMapping("/read/{id}")
-    public Student read(@PathVariable String id) {
-        return this.service.read(id);
+    public Student readStudent(@PathVariable String id) {
+        return this.studentService.read(id);
     }
 
     @PutMapping("/update")
-    public Student update(@RequestBody Student student) {
-        return this.service.update(student);
+    public Student updateStudent(@RequestBody Student student) {
+        return this.studentService.update(student);
     }
 
-
-
-
+    @GetMapping("/getAll")
+    public List<Student> getAll() {
+        return this.studentService.getAll();
+    }
 }

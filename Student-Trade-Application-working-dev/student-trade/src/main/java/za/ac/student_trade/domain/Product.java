@@ -2,7 +2,7 @@ package za.ac.student_trade.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.Builder;
+
 
 @Entity
 @Table(name = "product")
