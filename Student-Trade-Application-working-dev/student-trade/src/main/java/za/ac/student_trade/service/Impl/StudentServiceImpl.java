@@ -32,7 +32,7 @@ public class StudentServiceImpl implements IService<Student, String> {
     }
 
     @Override
-    public List<Student> getAll() {
+    public List<Student> getAll(){
         return this.studentRepository.findAll();
     }
 }
