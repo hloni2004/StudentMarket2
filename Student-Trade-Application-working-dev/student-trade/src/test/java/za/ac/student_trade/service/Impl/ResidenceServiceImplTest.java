@@ -20,7 +20,7 @@ class ResidenceServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        residence = ResidenceFactory.createResidence(null, "New Market Junction", "367", 3, "C Block");
+        residence = ResidenceFactory.createResidence( "New Market Junction", "367", 3, "C Block", null);
     }
     @Test
     void create() {

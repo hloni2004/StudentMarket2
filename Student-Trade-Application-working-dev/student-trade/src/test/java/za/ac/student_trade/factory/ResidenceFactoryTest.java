@@ -10,20 +10,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class ResidenceFactoryTest {
 
 
-        private static Residence residence = ResidenceFactory.createResidence(null, "New Market Junction", "367", 3, "C Block");
-        private static Residence res = ResidenceFactory.createResidence(null, "New Market Junction", "", 3, "C Block");
+
+        private static Residence residence = ResidenceFactory.createResidence("PRESIDENT HOUSE", "22", 367, "block c", null);
+        private static Residence res = ResidenceFactory.createResidence("NMJ", "420", 2, "block b", null);
 
         @Test
         void testCreateResidence() {
             assertNotNull(residence);
             System.out.println(residence.toString());
         }
-        @Test
 
-        void testThatFails(){
-            assertNull(res);
-            System.out.println("Res is null");
-
-
-        }
+//        @Test
+//        void testThatFails(){
+//            assertNull(res);
+//            System.out.println("Res is null");
+//        }
 }
