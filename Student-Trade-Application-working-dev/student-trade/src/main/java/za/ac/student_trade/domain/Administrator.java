@@ -22,7 +22,12 @@ public class Administrator {
     protected Administrator() {
     }
 
-    private Administrator(Builder builder) {}
+    private Administrator(Builder administrator) {
+        this.adminId = administrator.adminId;
+        this.username = administrator.username;
+        this.email = administrator.email;
+        this.password = administrator.password;
+    }
 
     public Long getAdminId() {
         return adminId;
@@ -56,10 +61,7 @@ public class Administrator {
         private String email;
         private String password;
 
-        public Builder setAdminId(Long adminId) {
-            this.adminId = adminId;
-            return this;
-        }
+
 
         public Builder setUsername(String username) {
             this.username = username;
