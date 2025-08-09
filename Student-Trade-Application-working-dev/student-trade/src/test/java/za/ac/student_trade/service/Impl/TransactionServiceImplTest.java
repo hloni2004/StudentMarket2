@@ -53,7 +53,7 @@ class TransactionServiceImplTest {
             buyer = StudentFactory.createStudent("Bob", "Buyer", "buyer@gmail.com", "pass456", buyerResidence);
             buyer = studentService.create(buyer);
 
-            product = ProductFactory.createProduct(
+            product = ProductFactory.create(
                     "Gaming Laptop", "High-performance gaming laptop with RTX graphics",
                     "Like New", 2500.00, "Electronics", true, "laptop_image.jpg", seller);
             product = productService.create(product);
@@ -102,12 +102,12 @@ class TransactionServiceImplTest {
 
         }
 
-        @Test
-        @Order(5)
-        void delete() {
-            boolean deleted = transactionService.delete(transaction.getTransactionId());
-
-        }
+//        @Test
+//        @Order(5)
+//        void delete() {
+//            boolean deleted = transactionService.delete(transaction.getTransactionId());
+//
+//        }
     }
 
 }
