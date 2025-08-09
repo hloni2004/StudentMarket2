@@ -9,12 +9,10 @@ public class AddressFactory {
     public static Address createAddress(String streetNumber, String streetName, String suburb, String city, String province,
                                         int postalCode){
 
-        Long addressId = new Random().nextLong();
 
         if(Helper.isNullOrEmpty(streetNumber) || Helper.isNullOrEmpty(streetName) || Helper.isNullOrEmpty(suburb)
                 || Helper.isNullOrEmpty(city) || Helper.isNullOrEmpty(province) || Helper.postalCodeValid(postalCode)){
             return new Address.Builder()
-                    .setAddressId(addressId)
                     .setStreetNumber(streetNumber)
                     .setStreetName(streetName)
                     .setSuburb(suburb)
