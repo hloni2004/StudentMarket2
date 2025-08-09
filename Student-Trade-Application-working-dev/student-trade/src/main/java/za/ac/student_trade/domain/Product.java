@@ -1,5 +1,6 @@
 package za.ac.student_trade.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Builder;
 
@@ -35,6 +36,8 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "seller_id")
+//    @JsonIgnoreProperties({"email", "residence", "password", "address", "productForSale"})
+    @JsonIgnoreProperties({"productForSale", "purchases"})
     private Student seller;
 
     @OneToOne(mappedBy = "product")
