@@ -14,7 +14,6 @@ public interface IService<T,ID>{
     //update
     T update (T t);
 
-//    //find all the students
-//    List<T> getAll();
+    List<T> getAll();
 
 }

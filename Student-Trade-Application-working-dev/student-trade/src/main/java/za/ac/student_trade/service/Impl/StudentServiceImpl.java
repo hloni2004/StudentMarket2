@@ -4,6 +4,9 @@ import org.springframework.stereotype.Service;
 import za.ac.student_trade.domain.Student;
 import za.ac.student_trade.repository.StudentRepository;
 import za.ac.student_trade.service.IService;
+
+import java.util.List;
+
 @Service
 public class StudentServiceImpl implements IService<Student, String> {
 
@@ -26,5 +29,10 @@ public class StudentServiceImpl implements IService<Student, String> {
     @Override
     public Student update(Student student) {
         return this.studentRepository.save(student);
+    }
+
+    @Override
+    public List<Student> getAll() {
+        return this.studentRepository.findAll();
     }
 }
