@@ -57,7 +57,7 @@ public class TransactionServiceImpl implements ITransactionService {
 
     @Override
     public Transaction read(String id) {
-        return transactionRepository.findById(Long.valueOf(id)).get();
+        return transactionRepository.findById(id).get();
     }
 
     @Override

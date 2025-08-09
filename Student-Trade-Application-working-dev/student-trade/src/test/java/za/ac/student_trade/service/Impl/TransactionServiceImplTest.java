@@ -14,13 +14,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Nested
+@SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TransactionServiceImplTest {
-
-
-    @Nested
-    @SpringBootTest
-    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-    class TransactionServiceTest {
 
         private static Transaction transaction;
         private static Product product;
@@ -67,9 +64,10 @@ class TransactionServiceImplTest {
         @Test
         @Order(1)
         void create() {
+            System.out.println(transaction);
             Transaction created = transactionService.create(transaction);
+            System.out.println("here 2");
             assertNotNull(created);
-            transaction = created;
             System.out.println("Created: " + transaction);
         }
 
@@ -110,4 +108,4 @@ class TransactionServiceImplTest {
 //        }
     }
 
-}
+//}
