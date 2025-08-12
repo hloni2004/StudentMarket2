@@ -29,7 +29,7 @@ class ProductServiceImplTest {
 
     @BeforeEach
     void setUp() {
-//        String existingStudent = names.getFirstName() + " " + names.getLastName(); ;
+
 
         Student names = new Student.Builder().setFirstName("Asanda").setLastName("Ndhlela").build();
 

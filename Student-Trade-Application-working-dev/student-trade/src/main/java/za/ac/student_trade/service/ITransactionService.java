@@ -6,5 +6,5 @@ import za.ac.student_trade.domain.Transaction;
 
 public interface ITransactionService extends IService <Transaction, String> {
 
-    Transaction createTransaction(Transaction transaction, Long productSoldId, String buyerId);
+    Transaction createTransaction(Transaction transaction, Long productSoldId, Long buyerId);
 }

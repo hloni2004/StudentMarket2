@@ -1,7 +1,6 @@
 package za.ac.student_trade.domain;
 
 import jakarta.persistence.*;
-
 import java.util.List;
 
 @Entity
@@ -9,7 +8,9 @@ import java.util.List;
 public class Student {
 
     @Id
-    protected String studentId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "student_id", updatable = false, nullable = false)
+    protected Long studentId;
 
     @Column(name = "first_name", nullable = false)
     protected String firstName;
@@ -17,7 +18,7 @@ public class Student {
     @Column(name = "last_name", nullable = false)
     protected String lastName;
 
-    @Column(name = "email",nullable = false)
+    @Column(name = "email", nullable = false)
     protected String email;
 
     @Column(name = "password", nullable = false)
@@ -33,11 +34,9 @@ public class Student {
     @OneToMany(mappedBy = "buyer")
     protected List<Transaction> purchases;
 
-
     protected Student() {}
 
     public Student(Builder builder) {
-        this.studentId = builder.studentId;
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
         this.email = builder.email;
@@ -45,10 +44,9 @@ public class Student {
         this.residence = builder.residence;
         this.productForSale = builder.productForSale;
         this.purchases = builder.purchases;
-
     }
 
-    public String getStudentId() {
+    public Long getStudentId() {
         return studentId;
     }
 
@@ -88,15 +86,13 @@ public class Student {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", address=" + residence + '\'' +
-                ", productForSale=" + productForSale + '\'' +
+                ", residence=" + residence +
+                ", productForSale=" + productForSale +
                 ", purchases=" + purchases +
                 '}';
     }
 
-
     public static class Builder {
-        private String studentId;
         private String firstName;
         private String lastName;
         private String email;
@@ -104,11 +100,6 @@ public class Student {
         private Residence residence;
         private List<Product> productForSale;
         private List<Transaction> purchases;
-
-        public Builder setStudentId(String studentId) {
-            this.studentId = studentId;
-            return this;
-        }
 
         public Builder setFirstName(String firstName) {
             this.firstName = firstName;
@@ -145,8 +136,7 @@ public class Student {
             return this;
         }
 
-        public Builder builder(Student student) {
-            this.studentId = student.getStudentId();
+        public Builder copy(Student student) {
             this.firstName = student.getFirstName();
             this.lastName = student.getLastName();
             this.email = student.getEmail();
@@ -157,21 +147,8 @@ public class Student {
             return this;
         }
 
-        public Builder copy(Student student) {
-            this.studentId = student.studentId;
-            this.firstName = student.firstName;
-            this.lastName = student.lastName;
-            this.email = student.email;
-            this.password = student.password;
-            this.residence = student.residence;
-            this.productForSale = student.productForSale;
-            this.purchases = student.purchases;
-            return this;
-        }
         public Student build() {
             return new Student(this);
         }
     }
-
-
 }

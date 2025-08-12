@@ -57,7 +57,7 @@ class StudentServiceImplTest {
         assertNotNull(created);
         System.out.println(created.toString());
 
-        // Update the static reference for other tests
+
         student = created;
     }
 

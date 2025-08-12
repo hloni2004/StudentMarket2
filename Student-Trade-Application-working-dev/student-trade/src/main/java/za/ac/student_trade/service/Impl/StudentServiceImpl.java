@@ -22,7 +22,7 @@ public class StudentServiceImpl implements IStudentService{
     }
 
     @Override
-    public Student read(String s) {
+    public Student read(Long s) {
         return this.studentRepository.findById(s).orElse(null);
     }
 

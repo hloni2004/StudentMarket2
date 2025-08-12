@@ -10,7 +10,6 @@ public class StudentFactory {
 
         String studentId = Helper.generateId();
         return new Student.Builder()
-                .setStudentId(studentId)
                 .setFirstName(firstName)
                 .setLastName(lastName)
                 .setEmail(email)

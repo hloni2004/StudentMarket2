@@ -9,7 +9,7 @@ import java.util.List;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/students")
+@RequestMapping("/api/student")
 public class StudentController {
 
     private StudentServiceImpl studentService;
@@ -25,7 +25,7 @@ public class StudentController {
     }
 
     @GetMapping("/read/{id}")
-    public Student readStudent(@PathVariable String id) {
+    public Student readStudent(@PathVariable Long id) {
         return this.studentService.read(id);
     }
 
