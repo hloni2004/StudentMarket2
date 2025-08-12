@@ -29,7 +29,7 @@ public class TransactionServiceImpl implements ITransactionService {
     }
 
     @Override
-    public Transaction createTransaction(Transaction transaction, Long productSoldId, Long buyerId) {
+    public Transaction createTransaction(Transaction transaction, Long productSoldId, String buyerId) {
 
         Product productSold = productRepository.findById(productSoldId).orElse(null);
 

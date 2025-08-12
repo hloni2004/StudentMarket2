@@ -20,7 +20,7 @@ public class TransactionController {
     @PostMapping("/create")
     public Transaction createTransaction(@RequestParam Long productId,
                                          @RequestParam String buyerId) {
-        return this.transactionService.createTransaction(new Transaction(),productId, Long.valueOf(buyerId));
+        return this.transactionService.createTransaction(new Transaction(),productId, buyerId);
     }
 
     @GetMapping("/read/{id}")

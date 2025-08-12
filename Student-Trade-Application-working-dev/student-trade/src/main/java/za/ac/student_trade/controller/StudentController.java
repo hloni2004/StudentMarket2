@@ -25,7 +25,7 @@ public class StudentController {
     }
 
     @GetMapping("/read/{id}")
-    public Student readStudent(@PathVariable Long id) {
+    public Student readStudent(@PathVariable String id) {
         return this.studentService.read(id);
     }
 

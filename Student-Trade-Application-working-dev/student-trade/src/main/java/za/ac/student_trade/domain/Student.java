@@ -7,10 +7,8 @@ import java.util.List;
 @Table(name = "student")
 public class Student {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "student_id", updatable = false, nullable = false)
-    protected Long studentId;
+    @Id @Column(name = "student_id")
+    protected String studentId;
 
     @Column(name = "first_name", nullable = false)
     protected String firstName;
@@ -37,6 +35,7 @@ public class Student {
     protected Student() {}
 
     public Student(Builder builder) {
+        this.studentId = builder.studentId;
         this.firstName = builder.firstName;
         this.lastName = builder.lastName;
         this.email = builder.email;
@@ -46,7 +45,7 @@ public class Student {
         this.purchases = builder.purchases;
     }
 
-    public Long getStudentId() {
+    public String getStudentId() {
         return studentId;
     }
 
@@ -93,6 +92,7 @@ public class Student {
     }
 
     public static class Builder {
+        private String studentId;
         private String firstName;
         private String lastName;
         private String email;
@@ -100,6 +100,11 @@ public class Student {
         private Residence residence;
         private List<Product> productForSale;
         private List<Transaction> purchases;
+
+        public Builder setStudentId(String studentId) {
+            this.studentId = studentId;
+            return this;
+        }
 
         public Builder setFirstName(String firstName) {
             this.firstName = firstName;
@@ -137,6 +142,7 @@ public class Student {
         }
 
         public Builder copy(Student student) {
+            this.studentId = student.studentId;
             this.firstName = student.getFirstName();
             this.lastName = student.getLastName();
             this.email = student.getEmail();
