@@ -6,15 +6,18 @@ import org.springframework.web.bind.annotation.*;
 import za.ac.student_trade.domain.Product;
 import za.ac.student_trade.service.Impl.ProductServiceImpl;
 
+import java.util.List;
+
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
 
-    private static ProductServiceImpl productService;
+    private ProductServiceImpl productService;
 
     @Autowired
     public void setProductService(ProductServiceImpl productService) {
-        ProductController.productService = productService;
+        this.productService = productService;
     }
 
     @PostMapping("/create")
@@ -25,5 +28,10 @@ public class ProductController {
     @GetMapping("/read/{id}")
     public Product readProduct(@PathVariable Long id) {
         return this.productService.read(id);
+    }
+
+    @GetMapping("/getAllProducts")
+    public List<Product> getAllProducts() {
+        return this.productService.getAll();
     }
 }

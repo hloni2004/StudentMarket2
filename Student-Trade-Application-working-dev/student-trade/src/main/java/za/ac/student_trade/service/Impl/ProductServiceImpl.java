@@ -26,10 +26,22 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public Product createProduct(Product product, String sellerId) {
-        Optional<Student> seller = studentRepository.findById(sellerId);
+    public Product createProduct(Product product, Student sellerDetails) {
+        List<Student> seller = studentRepository.findByFirstNameAndLastName(sellerDetails.getFirstName(),sellerDetails.getLastName());
 
-        Student currentSeller = seller.get();
+
+        if (seller.isEmpty()) {
+            throw new RuntimeException("Seller not found with name: " +
+                    sellerDetails.getFirstName() + " " + sellerDetails.getLastName());
+        }
+
+        // Optional: Handle duplicates
+        if (seller.size() > 1) {
+            throw new RuntimeException("Multiple sellers found with name: " +
+                    sellerDetails.getFirstName() + " " + sellerDetails.getLastName());
+        }
+
+        Student currentSeller = seller.getFirst();
 
         Product newProduct = ProductFactory.create(
                 product.getProductName(),
@@ -61,7 +73,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        return List.of();
+    public List<Product> getAll() {
+        return productRepository.findAll();
     }
 }
