@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Student Trade</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .welcome-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .welcome-card h2 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-icon {
+            width: 24px;
+            height: 24px;
+            background: #667eea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .card p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .card-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .card-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Student Dashboard</h1>
+        <div class="user-info">
+            <span id="userName">Student</span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="welcome-card">
+            <h2>Welcome back!</h2>
+            <p>Manage your products, view transactions, and connect with other students in the trading platform.</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="productsCount">0</div>
+                <div class="stat-label">Products Listed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="transactionsCount">0</div>
+                <div class="stat-label">Total Transactions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="earningsCount">$0</div>
+                <div class="stat-label">Total Earnings</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h3>
+                    <span class="card-icon">📦</span>
+                    My Products
+                </h3>
+                <p>View and manage the products you have listed for sale.</p>
+                <button class="card-btn" onclick="viewProducts()">View Products</button>
+            </div>
+
+            <div class="card">
+                <h3>
+                    <span class="card-icon">💰</span>
+                    Sell Product
+                </h3>
+                <p>List a new product for sale on the platform.</p>
+                <button class="card-btn" onclick="sellProduct()">Sell Product</button>
+            </div>
+
+            <div class="card">
+                <h3>
+                    <span class="card-icon">🛒</span>
+                    Browse Products
+                </h3>
+                <p>Browse and purchase products from other students.</p>
+                <button class="card-btn" onclick="browseProducts()">Browse</button>
+            </div>
+
+            <div class="card">
+                <h3>
+                    <span class="card-icon">📊</span>
+                    Transaction History
+                </h3>
+                <p>View your complete transaction history and earnings.</p>
+                <button class="card-btn" onclick="viewTransactions()">View History</button>
+            </div>
+
+            <div class="card">
+                <h3>
+                    <span class="card-icon">👤</span>
+                    Profile Settings
+                </h3>
+                <p>Update your profile information and preferences.</p>
+                <button class="card-btn" onclick="editProfile()">Edit Profile</button>
+            </div>
+
+            <div class="card">
+                <h3>
+                    <span class="card-icon">🏠</span>
+                    Residence Info
+                </h3>
+                <p>Manage your residence and address information.</p>
+                <button class="card-btn" onclick="manageResidence()">Manage</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        
+        if (!user.id || user.role !== 'STUDENT') {
+            alert('Access denied. Please login as a student.');
+            window.location.href = '/login.html';
+        }
+
+        // Display user name
+        document.getElementById('userName').textContent = user.name || 'Student';
+
+        // Load dashboard data (mock data for demo)
+        function loadDashboardData() {
+            // In a real application, you would fetch this data from the backend
+            document.getElementById('productsCount').textContent = '5';
+            document.getElementById('transactionsCount').textContent = '12';
+            document.getElementById('earningsCount').textContent = '$150';
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = '/login.html';
+        }
+
+        function viewProducts() {
+            alert('View Products functionality would be implemented here');
+        }
+
+        function sellProduct() {
+            alert('Sell Product functionality would be implemented here');
+        }
+
+        function browseProducts() {
+            alert('Browse Products functionality would be implemented here');
+        }
+
+        function viewTransactions() {
+            alert('View Transactions functionality would be implemented here');
+        }
+
+        function editProfile() {
+            alert('Edit Profile functionality would be implemented here');
+        }
+
+        function manageResidence() {
+            alert('Manage Residence functionality would be implemented here');
+        }
+
+        // Load dashboard data when page loads
+        loadDashboardData();
+    </script>
+</body>
+</html>

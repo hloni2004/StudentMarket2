@@ -49,4 +49,9 @@ public class StudentServiceImpl implements IStudentService{
     public List<Student> findByEmail(String email) {
         return this.studentRepository.findByEmail(email);
     }
+
+    @Override
+    public Student findByEmailAndPassword(String email, String password) {
+        return this.studentRepository.findByEmailAndPassword(email, password).orElse(null);
+    }
 }

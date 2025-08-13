@@ -37,6 +37,26 @@ public class AdministratorServiceImpl implements IAdministratorService {
     public List<Administrator> getAll() {
         return administratorRepository.findAll();
     }
+
+    @Override
+    public Administrator findByEmail(String email) {
+        return administratorRepository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public Administrator findByUsername(String username) {
+        return administratorRepository.findByUsername(username).orElse(null);
+    }
+
+    @Override
+    public Administrator findByEmailAndPassword(String email, String password) {
+        return administratorRepository.findByEmailAndPassword(email, password).orElse(null);
+    }
+
+    @Override
+    public Administrator findByUsernameAndPassword(String username, String password) {
+        return administratorRepository.findByUsernameAndPassword(username, password).orElse(null);
+    }
 }
 
 
