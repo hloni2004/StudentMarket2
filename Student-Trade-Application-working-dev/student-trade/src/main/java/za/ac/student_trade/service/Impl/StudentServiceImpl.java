@@ -2,6 +2,7 @@ package za.ac.student_trade.service.Impl;
 
 import org.springframework.stereotype.Service;
 import za.ac.student_trade.domain.Student;
+import za.ac.student_trade.factory.StudentFactory;
 import za.ac.student_trade.repository.StudentRepository;
 import za.ac.student_trade.service.IStudentService;
 
@@ -18,7 +19,14 @@ public class StudentServiceImpl implements IStudentService{
 
     @Override
     public Student create(Student student) {
-        return studentRepository.save(student);
+        Student createdStudent = StudentFactory.createStudent(
+                student.getFirstName(),
+                student.getLastName(),
+                student.getEmail(),
+                student.getPassword(),
+                student.getResidence()
+        );
+        return studentRepository.save(createdStudent);
     }
 
     @Override
@@ -38,7 +46,14 @@ public class StudentServiceImpl implements IStudentService{
     }
 
     @Override
-    public List<Student> findByEmail(String email) {
-        return this.studentRepository.findByEmail(email);
+    public List<Student> findByEmailAndPassword(String email, String password) {
+        System.out.println("Searching for email: '" + email + "' and password: '" + password + "'");
+
+        List<Student> result = this.studentRepository.findByEmailAndPassword(email, password);
+        System.out.println("Found " + result.size() + " students");
+
+        return result;
     }
-}
+
+    }
+
