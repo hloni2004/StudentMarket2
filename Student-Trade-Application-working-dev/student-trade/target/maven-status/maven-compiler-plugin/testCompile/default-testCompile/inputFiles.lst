@@ -1,0 +1,14 @@
+/workspace/Student-Trade-Application-working-dev/student-trade/src/test/java/za/ac/student_trade/StudentTradeApplicationTests.java
+/workspace/Student-Trade-Application-working-dev/student-trade/src/test/java/za/ac/student_trade/controller/ProductControllerTest.java
+/workspace/Student-Trade-Application-working-dev/student-trade/src/test/java/za/ac/student_trade/factory/AddressFactoryTest.java
+/workspace/Student-Trade-Application-working-dev/student-trade/src/test/java/za/ac/student_trade/factory/AdministratorFactoryTest.java
+/workspace/Student-Trade-Application-working-dev/student-trade/src/test/java/za/ac/student_trade/factory/ProductFactoryTest.java
+/workspace/Student-Trade-Application-working-dev/student-trade/src/test/java/za/ac/student_trade/factory/ResidenceFactoryTest.java
+/workspace/Student-Trade-Application-working-dev/student-trade/src/test/java/za/ac/student_trade/factory/StudentFactoryTest.java
+/workspace/Student-Trade-Application-working-dev/student-trade/src/test/java/za/ac/student_trade/factory/TransactionFactoryTest.java
+/workspace/Student-Trade-Application-working-dev/student-trade/src/test/java/za/ac/student_trade/service/Impl/AddressServiceImplTest.java
+/workspace/Student-Trade-Application-working-dev/student-trade/src/test/java/za/ac/student_trade/service/Impl/AdministratorServiceImplTest.java
+/workspace/Student-Trade-Application-working-dev/student-trade/src/test/java/za/ac/student_trade/service/Impl/ProductServiceImplTest.java
+/workspace/Student-Trade-Application-working-dev/student-trade/src/test/java/za/ac/student_trade/service/Impl/ResidenceServiceImplTest.java
+/workspace/Student-Trade-Application-working-dev/student-trade/src/test/java/za/ac/student_trade/service/Impl/StudentServiceImplTest.java
+/workspace/Student-Trade-Application-working-dev/student-trade/src/test/java/za/ac/student_trade/service/Impl/TransactionServiceImplTest.java

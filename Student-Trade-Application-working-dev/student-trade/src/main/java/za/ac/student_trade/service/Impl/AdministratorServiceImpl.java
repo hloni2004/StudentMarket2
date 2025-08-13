@@ -7,6 +7,7 @@ import za.ac.student_trade.repository.AdministratorRepository;
 import za.ac.student_trade.service.IAdministratorService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AdministratorServiceImpl implements IAdministratorService {
@@ -36,6 +37,11 @@ public class AdministratorServiceImpl implements IAdministratorService {
     @Override
     public List<Administrator> getAll() {
         return administratorRepository.findAll();
+    }
+
+    @Override
+    public Optional<Administrator> findByEmail(String email) {
+        return administratorRepository.findByEmail(email);
     }
 }
 

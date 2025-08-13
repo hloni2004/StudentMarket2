@@ -1,0 +1,14 @@
+za/ac/student_trade/factory/ProductFactoryTest.class
+za/ac/student_trade/service/Impl/ProductServiceImplTest.class
+za/ac/student_trade/service/Impl/ResidenceServiceImplTest.class
+za/ac/student_trade/service/Impl/AddressServiceImplTest.class
+za/ac/student_trade/factory/TransactionFactoryTest.class
+za/ac/student_trade/factory/StudentFactoryTest.class
+za/ac/student_trade/StudentTradeApplicationTests.class
+za/ac/student_trade/service/Impl/StudentServiceImplTest.class
+za/ac/student_trade/service/Impl/TransactionServiceImplTest.class
+za/ac/student_trade/service/Impl/AdministratorServiceImplTest.class
+za/ac/student_trade/factory/AdministratorFactoryTest.class
+za/ac/student_trade/factory/AddressFactoryTest.class
+za/ac/student_trade/controller/ProductControllerTest.class
+za/ac/student_trade/factory/ResidenceFactoryTest.class
