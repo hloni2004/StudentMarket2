@@ -15,7 +15,7 @@ import java.util.Map;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/student")
+@RequestMapping("/api/students")
 public class StudentController {
 
     private StudentServiceImpl studentService;
