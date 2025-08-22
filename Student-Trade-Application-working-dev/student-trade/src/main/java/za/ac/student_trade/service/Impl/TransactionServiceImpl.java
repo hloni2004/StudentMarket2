@@ -38,7 +38,7 @@ public class TransactionServiceImpl implements ITransactionService {
         Transaction newTransaction = new Transaction.Builder()
                 .setTransactionId(UUID.randomUUID().toString())
                 .setTransactionDate(LocalDateTime.now())
-                .setImageOfProduct(productSold.getProductImageUrl())
+//                .setImageOfProduct(productSold.getProductImageUrl())
                 .setProductLabel(productSold.getProductName())
                 .setProductDescription(productSold.getProductDescription())
                 .setProductCondition(productSold.getCondition())
