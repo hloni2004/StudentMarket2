@@ -50,6 +50,11 @@ public class StudentServiceImpl implements IStudentService{
     }
 
     @Override
+    public void delete(String studentId) {
+        studentRepository.deleteById(studentId);
+    }
+
+    @Override
     public List<Student> findByEmailAndPassword(String email, String password) {
         System.out.println("Searching for email: '" + email + "' and password: '" + password + "'");
 
