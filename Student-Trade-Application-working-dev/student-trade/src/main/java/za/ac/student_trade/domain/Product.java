@@ -45,7 +45,7 @@ public class Product {
     private String imageType;
 
     @Lob
-    @Column(name = "imageData")
+    @Column(name = "imageData", columnDefinition = "MEDIUMBLOB")
     private byte[] imageData;
 
     @ManyToOne
