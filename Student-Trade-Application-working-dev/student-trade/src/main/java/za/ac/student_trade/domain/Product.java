@@ -49,7 +49,7 @@ public class Product {
     private byte[] imageData;
 
     @ManyToOne
-    @JoinColumn(name = "seller_id")
+    @JoinColumn(name = "seller_id", nullable = false)
     @JsonIgnoreProperties({"productForSale", "purchases"})
     private Student seller;
 
