@@ -20,18 +20,11 @@ import java.util.List;
 public class ProductController {
 
     private ProductServiceImpl productService;
-//    private StudentServiceImpl studentService;
-
 
     @Autowired
     public void setProductService(ProductServiceImpl productService) {
         this.productService = productService;
     }
-
-//    @Autowired
-//    public void setStudentService(StudentServiceImpl studentService) {
-//        this.studentService = studentService;
-//    }
 
     @PostMapping(value = "/create", consumes = "multipart/form-data")
     public ResponseEntity<Product> createProduct(@RequestPart Product product, @RequestPart MultipartFile productImage) {
@@ -60,6 +53,8 @@ public class ProductController {
     public List<Product> getAllProducts() {
         return this.productService.getAll();
     }
+
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.delete(id);

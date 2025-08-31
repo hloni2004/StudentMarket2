@@ -50,7 +50,7 @@ public class StudentController {
     public List<Student> getAll() {
         return this.studentService.getAll();
     }
-    // In StudentController
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteStudent(@PathVariable String id) {
         studentService.delete(id);
@@ -61,7 +61,6 @@ public class StudentController {
     @GetMapping("/login")
     public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
         try {
-            // Check Admin first
             List<Administrator> admins = administratorServiceImpl.findByEmailAndPassword(email.trim(), password.trim());
             if (!admins.isEmpty()) {
                 Administrator admin = admins.get(0);
@@ -80,7 +79,6 @@ public class StudentController {
                 return ResponseEntity.ok(successResponse);
             }
 
-            // Check Student
             List<Student> students = studentService.findByEmailAndPassword(email.trim(), password.trim());
             if (!students.isEmpty()) {
                 Student student = students.get(0);

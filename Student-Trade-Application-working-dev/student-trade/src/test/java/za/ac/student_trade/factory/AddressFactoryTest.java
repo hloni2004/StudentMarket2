@@ -12,7 +12,6 @@ class AddressFactoryTest {
         Address address = AddressFactory.createAddress(
                 "123", "Main Street", "Central", "Cape Town", "Western Cape", 8000);
         assertNotNull(address);
-
         System.out.println(address);
 
     }

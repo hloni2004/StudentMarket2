@@ -10,7 +10,7 @@ import java.util.Random;
 import java.util.UUID;
 
 public class TransactionFactory {
-    public static Transaction createTransaction(LocalDateTime transactionDate,String imageOfProduct,String productLabel,String description, String condition, double price, Product productSold, Student buyer) {
+    public static Transaction createTransaction(LocalDateTime transactionDate,byte[]  imageOfProduct,String productLabel,String description, String condition, double price, Product productSold, Student buyer) {
 
         String transactionId = UUID.randomUUID().toString();
         return new Transaction.Builder()

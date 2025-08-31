@@ -39,6 +39,4 @@ public class AddressServiceImpl implements IService<Address, Long> {
     @Override
     public List<Address> getAll() {return addressRepository.findAll();}
 
-
-
 }

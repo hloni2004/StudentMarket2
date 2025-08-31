@@ -4,7 +4,6 @@ import za.ac.student_trade.domain.Product;
 import za.ac.student_trade.domain.Student;
 
 import java.time.LocalDate;
-import java.util.Random;
 
 public class ProductFactory {
 

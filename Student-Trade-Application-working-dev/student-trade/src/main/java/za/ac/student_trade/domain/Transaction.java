@@ -10,14 +10,13 @@ import java.time.LocalDateTime;
 public class Transaction {
 
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String transactionId;
 
     @Column(name = "transaction_date")
     private LocalDateTime transactionDate;
 
-    @Column(name = "image_of_product")
-    private String imageOfProduct;
+    @Column(name = "image_of_product", columnDefinition = "MEDIUMBLOB")
+    private byte[] imageOfProduct;
 
     @Column(name = "product_label")
     private String productLabel;
@@ -58,7 +57,7 @@ public class Transaction {
         return transactionId;
     }
 
-    public String getImageOfProduct() {
+    public byte[]  getImageOfProduct() {
         return imageOfProduct;
     }
 
@@ -103,7 +102,7 @@ public class Transaction {
 
     public static class Builder {
         private String transactionId;
-        private String imageOfProduct;
+        private byte[]  imageOfProduct;
         private String productLabel;
         private String productDescription;
         private String productCondition;
@@ -117,7 +116,7 @@ public class Transaction {
             return this;
         }
 
-        public Builder setImageOfProduct(String imageOfProduct) {
+        public Builder setImageOfProduct(byte[] imageOfProduct) {
             this.imageOfProduct = imageOfProduct;
             return this;
         }
@@ -156,8 +155,6 @@ public class Transaction {
             this.buyer = buyer;
             return this;
         }
-
-
 
         public Builder copy(Transaction transaction) {
             this.transactionId = transaction.transactionId;

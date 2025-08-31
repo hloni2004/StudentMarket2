@@ -17,8 +17,6 @@ public class ResidenceServiceImpl implements ResidenceService <Residence, Long> 
     @Autowired
     public ResidenceServiceImpl(ResidenceRepository residenceRepository) {
         this.residenceRepository = residenceRepository;
-
-
     }
 
     @Override
