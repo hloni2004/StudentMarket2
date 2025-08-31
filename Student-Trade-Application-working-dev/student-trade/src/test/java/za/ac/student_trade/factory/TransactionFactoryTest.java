@@ -34,7 +34,7 @@ class TransactionFactoryTest {
 
         Transaction transaction = TransactionFactory.createTransaction(
                 now,
-                "imageOfProduct.jpg",
+                null,
                 "Laptop",
                 "High-end laptop",
                 "New",

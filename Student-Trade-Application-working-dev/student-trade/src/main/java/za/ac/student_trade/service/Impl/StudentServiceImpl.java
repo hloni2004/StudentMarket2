@@ -13,12 +13,14 @@ public class StudentServiceImpl implements IStudentService{
 
     private final StudentRepository studentRepository;
 
+
     public StudentServiceImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
     @Override
     public Student create(Student student) {
+
         Student createdStudent = StudentFactory.createStudent(
                 student.getFirstName(),
                 student.getLastName(),
@@ -43,6 +45,11 @@ public class StudentServiceImpl implements IStudentService{
     @Override
     public List<Student> getAll(){
         return this.studentRepository.findAll();
+    }
+
+    @Override
+    public void delete(String studentId) {
+        studentRepository.deleteById(studentId);
     }
 
     @Override

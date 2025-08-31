@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface ResidenceService<T, ID> {
 
-
-
     Residence create(Residence residence);
 
     Residence read(Long id);

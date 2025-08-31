@@ -2,6 +2,7 @@ package za.ac.student_trade.service.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import za.ac.student_trade.domain.Product;
 import za.ac.student_trade.domain.Student;
 import za.ac.student_trade.domain.Transaction;
@@ -10,6 +11,7 @@ import za.ac.student_trade.repository.StudentRepository;
 import za.ac.student_trade.repository.TransactionRepository;
 import za.ac.student_trade.service.ITransactionService;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -38,7 +40,7 @@ public class TransactionServiceImpl implements ITransactionService {
         Transaction newTransaction = new Transaction.Builder()
                 .setTransactionId(UUID.randomUUID().toString())
                 .setTransactionDate(LocalDateTime.now())
-//                .setImageOfProduct(productSold.getProductImageUrl())
+                .setImageOfProduct(productSold.getImageData())
                 .setProductLabel(productSold.getProductName())
                 .setProductDescription(productSold.getProductDescription())
                 .setProductCondition(productSold.getCondition())
@@ -69,4 +71,5 @@ public class TransactionServiceImpl implements ITransactionService {
     public List<Transaction> getAll(){
         return transactionRepository.findAll();
     };
+
 }

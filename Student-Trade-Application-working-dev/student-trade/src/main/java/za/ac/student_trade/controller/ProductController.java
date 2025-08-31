@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import za.ac.student_trade.domain.Product;
+import za.ac.student_trade.domain.Student;
 import za.ac.student_trade.service.Impl.ProductServiceImpl;
+import za.ac.student_trade.service.Impl.StudentServiceImpl;
 
 import java.util.List;
 
@@ -27,9 +29,7 @@ public class ProductController {
     @PostMapping(value = "/create", consumes = "multipart/form-data")
     public ResponseEntity<Product> createProduct(@RequestPart Product product, @RequestPart MultipartFile productImage) {
         try{
-            System.out.println("ProductController.createProduct");
             Product newProduct = productService.addProduct(product, productImage);
-            System.out.println("ProductController");
             return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
         }catch(Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -52,5 +52,12 @@ public class ProductController {
     @GetMapping("/getAllProducts")
     public List<Product> getAllProducts() {
         return this.productService.getAll();
+    }
+
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+        productService.delete(id);
+        return ResponseEntity.ok().build();
     }
 }
