@@ -1,11 +1,13 @@
 package za.ac.student_trade.service.Impl;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import za.ac.student_trade.domain.Product;
 import za.ac.student_trade.domain.Student;
 import za.ac.student_trade.domain.Transaction;
+import za.ac.student_trade.factory.TransactionFactory;
 import za.ac.student_trade.repository.ProductRepository;
 import za.ac.student_trade.repository.StudentRepository;
 import za.ac.student_trade.repository.TransactionRepository;
@@ -31,26 +33,37 @@ public class TransactionServiceImpl implements ITransactionService {
     }
 
     @Override
-    public Transaction createTransaction(Transaction transaction, Long productSoldId, String buyerId) {
+    @Transactional
+    public Transaction createTransaction(Transaction transaction, Long productId, String buyerId) {
 
-        Product productSold = productRepository.findById(productSoldId).orElse(null);
+        Student buyer = studentRepository.findById(buyerId)
+                .orElseThrow(() -> new RuntimeException("Buyer not found"));
 
-        Student buyer = studentRepository.findById(buyerId).orElse(null);
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        Transaction newTransaction = new Transaction.Builder()
-                .setTransactionId(UUID.randomUUID().toString())
-                .setTransactionDate(LocalDateTime.now())
-                .setImageOfProduct(productSold.getImageData())
-                .setProductLabel(productSold.getProductName())
-                .setProductDescription(productSold.getProductDescription())
-                .setProductCondition(productSold.getCondition())
-                .setPrice(productSold.getPrice())
-                .setProduct(productSold)
-                .setBuyer(buyer)
-                .build();
+        // Prevent buying the same product twice
+        boolean alreadySold = transactionRepository.existsByProduct(product);
+        if (alreadySold) {
+            throw new RuntimeException("Product is already sold");
+        }
 
-        return this.transactionRepository.save(newTransaction);
+        // Create a new transaction using the factory
+        Transaction newTransaction = TransactionFactory.createTransaction(
+                LocalDateTime.now(),
+                product.getImageData(),
+                product.getProductName(),
+                product.getProductDescription(),
+                product.getCondition(),
+                product.getPrice(),
+                product,
+                buyer
+        );
+
+        return transactionRepository.save(newTransaction);
     }
+
+
 
     @Override
     public Transaction create(Transaction transaction) {
