@@ -1,5 +1,7 @@
 package za.ac.student_trade.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 
@@ -10,6 +12,7 @@ import java.time.LocalDateTime;
 public class Transaction {
 
     @Id
+//    @GeneratedValue(strategy = GenerationType.UUID)
     private String transactionId;
 
     @Column(name = "transaction_date")
@@ -34,8 +37,9 @@ public class Transaction {
     @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "buyer_id")
+    @JsonBackReference(value = "buyer-transactions") // links to Student.purchases
     private Student buyer;
 
     public Transaction() {

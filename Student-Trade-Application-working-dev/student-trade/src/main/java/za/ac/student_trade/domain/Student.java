@@ -1,5 +1,7 @@
 package za.ac.student_trade.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -30,6 +32,7 @@ public class Student {
     protected List<Product> productForSale;
 
     @OneToMany(mappedBy = "buyer")
+    @JsonManagedReference(value = "buyer-transactions")
     protected List<Transaction> purchases;
 
     protected Student() {}
