@@ -1,6 +1,7 @@
 package za.ac.student_trade.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -52,13 +53,13 @@ public class Product {
     @Column(name = "imageData", columnDefinition = "MEDIUMBLOB")
     private byte[] imageData;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "seller_id", nullable = false)
     @JsonIgnoreProperties({"productForSale", "purchases"})
     private Student seller;
 
     @OneToOne(mappedBy = "product")
-    @JsonIgnoreProperties("product")
+    @JsonIgnore // ADDED: Break circular reference
     private Transaction transaction;
 
     public Product() {
@@ -128,6 +129,7 @@ public class Product {
     public String getImageName() {
         return imageName;
     }
+
     public String getImageType() {
         return imageType;
     }
@@ -151,8 +153,7 @@ public class Product {
                 ", imageType='" + imageType + '\'' +
                 ", imageDate=" + Arrays.toString(imageData) + '\'' +
                 ", seller=" + seller +
-                ", transaction=" + transaction +
-                '}';
+                '}'; // Removed transaction from toString to avoid circular reference
     }
 
     public static class Builder {

@@ -3,25 +3,39 @@ package za.ac.student_trade.factory;
 import za.ac.student_trade.domain.Product;
 import za.ac.student_trade.domain.Student;
 import za.ac.student_trade.domain.Transaction;
-import za.ac.student_trade.util.Helper;
+import za.ac.student_trade.domain.Transaction.TransactionStatus;
 
 import java.time.LocalDateTime;
-import java.util.Random;
-import java.util.UUID;
 
 public class TransactionFactory {
-    public static Transaction createTransaction(LocalDateTime transactionDate,byte[]  imageOfProduct,String productLabel,String description, String condition, double price, Product productSold, Student buyer, Student seller) {
 
-        String transactionId = UUID.randomUUID().toString();
+    public static Transaction createTransaction(Product product, Student buyer) {
+        // Get the seller from the product
+        Student seller = product.getSeller();
+
         return new Transaction.Builder()
-                .setTransactionId(transactionId)
+                .setPrice(product.getPrice())
+                .setProduct(product)
+                .setBuyer(buyer)
+                .setSeller(seller)
+                .setStatus(TransactionStatus.COMPLETED)
+                .build();
+    }
+
+    public static Transaction createTransaction(LocalDateTime transactionDate, byte[] imageOfProduct,String productLabel ,
+                                                String description, String condition ,double price,
+                                                TransactionStatus status, Product product,
+                                                Student buyer, Student seller) {
+
+        return new Transaction.Builder()
                 .setTransactionDate(transactionDate)
                 .setImageOfProduct(imageOfProduct)
                 .setProductLabel(productLabel)
-                .setProductCondition(description)
+                .setProductDescription(description)
                 .setProductCondition(condition)
                 .setPrice(price)
-                .setProduct(productSold)
+                .setStatus(status)
+                .setProduct(product)
                 .setBuyer(buyer)
                 .setSeller(seller)
                 .build();
