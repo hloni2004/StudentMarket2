@@ -1,7 +1,6 @@
 package za.ac.student_trade.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -9,7 +8,8 @@ import java.util.List;
 @Table(name = "student")
 public class Student {
 
-    @Id @Column(name = "student_id")
+    @Id
+    @Column(name = "student_id")
     protected String studentId;
 
     @Column(name = "first_name", nullable = false)
@@ -29,10 +29,11 @@ public class Student {
     protected Residence residence;
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // ADDED: Break circular reference
     protected List<Product> productForSale;
 
     @OneToMany(mappedBy = "buyer")
-    @JsonManagedReference(value = "buyer-transactions")
+    @JsonIgnore // ADDED: Break circular reference
     protected List<Transaction> purchases;
 
     protected Student() {}
@@ -89,9 +90,7 @@ public class Student {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", residence=" + residence +
-                ", productForSale=" + productForSale +
-                ", purchases=" + purchases +
-                '}';
+                '}'; // Removed productForSale and purchases from toString
     }
 
     public static class Builder {

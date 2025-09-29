@@ -2,19 +2,15 @@ package za.ac.student_trade.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import za.ac.student_trade.domain.Product;
 import za.ac.student_trade.domain.Transaction;
 import za.ac.student_trade.service.Impl.TransactionServiceImpl;
 
-import java.io.IOException;
-
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/api/transaction")
-@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("api/transaction")
 public class TransactionController {
 
-    private final TransactionServiceImpl transactionService;
+    private TransactionServiceImpl transactionService;
 
     @Autowired
     public TransactionController(TransactionServiceImpl transactionService) {
@@ -24,11 +20,11 @@ public class TransactionController {
     @PostMapping("/create")
     public Transaction createTransaction(@RequestParam Long productId,
                                          @RequestParam String buyerId) {
-        return transactionService.createTransaction(null, productId, buyerId);
+        return this.transactionService.createTransaction(new Transaction(), productId, buyerId);
     }
 
-    @GetMapping("/{id}")  // cleaner REST style
+    @GetMapping("/read/{id}")
     public Transaction readTransaction(@PathVariable String id) {
-        return transactionService.read(id);
+        return this.transactionService.read(id);
     }
 }

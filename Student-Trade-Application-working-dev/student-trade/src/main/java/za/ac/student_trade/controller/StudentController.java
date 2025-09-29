@@ -15,7 +15,7 @@ import java.util.Map;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/student")
+@RequestMapping("api/student")
 public class StudentController {
 
     private StudentServiceImpl studentService;
@@ -64,7 +64,6 @@ public class StudentController {
             List<Administrator> admins = administratorServiceImpl.findByEmailAndPassword(email.trim(), password.trim());
             if (!admins.isEmpty()) {
                 Administrator admin = admins.get(0);
-
                 Map<String, Object> successResponse = new HashMap<>();
                 successResponse.put("success", true);
                 successResponse.put("message", "Login successful");

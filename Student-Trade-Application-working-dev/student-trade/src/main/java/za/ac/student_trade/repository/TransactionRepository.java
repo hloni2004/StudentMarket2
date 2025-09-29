@@ -7,5 +7,4 @@ import za.ac.student_trade.domain.Transaction;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, String> {
-    boolean existsByProduct(Product product);
 }

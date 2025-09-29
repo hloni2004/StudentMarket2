@@ -1,12 +1,12 @@
 package za.ac.student_trade.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-
 
 @Entity
 @Table(name = "product")
@@ -41,6 +41,7 @@ public class Product {
 
     @Column(name = "imageName")
     private String imageName;
+
     @Column(name = "imageType")
     private String imageType;
 
@@ -48,13 +49,13 @@ public class Product {
     @Column(name = "imageData", columnDefinition = "MEDIUMBLOB")
     private byte[] imageData;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "seller_id", nullable = false)
     @JsonIgnoreProperties({"productForSale", "purchases"})
     private Student seller;
 
     @OneToOne(mappedBy = "product")
-    @JsonIgnoreProperties("product")
+    @JsonIgnore // ADDED: Break circular reference
     private Transaction transaction;
 
     public Product() {
@@ -119,6 +120,7 @@ public class Product {
     public String getImageName() {
         return imageName;
     }
+
     public String getImageType() {
         return imageType;
     }
@@ -140,10 +142,9 @@ public class Product {
                 ", releaseDate=" + releaseDate +
                 ", imageName='" + imageName + '\'' +
                 ", imageType='" + imageType + '\'' +
-                ", imageDate=" + Arrays.toString(imageData) + '\'' +
+                ", imageData=" + Arrays.toString(imageData) +
                 ", seller=" + seller +
-                ", transaction=" + transaction +
-                '}';
+                '}'; // Removed transaction from toString to avoid circular reference
     }
 
     public static class Builder {
@@ -196,7 +197,6 @@ public class Product {
             return this;
         }
 
-
         public Builder setSeller(Student seller) {
             this.seller = seller;
             return this;
@@ -239,23 +239,6 @@ public class Product {
             this.imageData = product.getImageData();
             this.imageName = product.getImageName();
             this.imageType = product.getImageType();
-            this.seller = product.getSeller();
-            this.transaction = product.getTransaction();
-            return this;
-        }
-
-        public Builder builder(Product product) {
-            this.productId = product.getProductId();
-            this.productName = product.getProductName();
-            this.productDescription = product.getProductDescription();
-            this.condition = product.getCondition();
-            this.price = product.getPrice();
-            this.productCategory = product.getProductCategory();
-            this.availabilityStatus = product.isAvailabilityStatus();
-            this.releaseDate = product.getReleaseDate();
-            this.imageName = product.getImageName();
-            this.imageType = product.getImageType();
-            this.imageData = product.getImageData();
             this.seller = product.getSeller();
             this.transaction = product.getTransaction();
             return this;
