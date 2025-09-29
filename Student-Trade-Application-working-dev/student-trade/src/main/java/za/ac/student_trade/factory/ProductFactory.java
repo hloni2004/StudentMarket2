@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 public class ProductFactory {
 
-    public static Product create(String productName, String productDescription, String condition, Double price, String productCategory,
+    public static Product create(String productName, String productDescription, String condition, Long price, String currency, String productCategory,
                                  boolean availabilityStatus, String imageName, String imageType, byte[] imageData, LocalDate releaseDate, Student seller) {
 
         return new Product.Builder()
@@ -15,6 +15,7 @@ public class ProductFactory {
                 .setProductDescription(productDescription)
                 .setCondition(condition)
                 .setPrice(price)
+                .setCurrency(currency)
                 .setProductCategory(productCategory)
                 .setAvailabilityStatus(availabilityStatus)
                 .setImageName(imageName)

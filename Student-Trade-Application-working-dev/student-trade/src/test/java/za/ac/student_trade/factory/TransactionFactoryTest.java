@@ -18,13 +18,19 @@ class TransactionFactoryTest {
                 .setProductName("Laptop")
                 .setProductDescription("Gaming laptop")
                 .setCondition("New")
-                .setPrice(1500.0)
+                .setPrice(1500L)
                 .setProductCategory("Electronics")
                 .setAvailabilityStatus(true)
 //                .setProductImageUrl("image.jpg")
                 .build();
 
         Student buyer = new Student.Builder()
+                .setFirstName("Dawn")
+                .setLastName("King")
+                .setEmail("dawnking@example.com")
+                .build();
+
+        Student seller = new Student.Builder()
                 .setFirstName("John")
                 .setLastName("Doe")
                 .setEmail("john.doe@example.com")
@@ -38,9 +44,10 @@ class TransactionFactoryTest {
                 "Laptop",
                 "High-end laptop",
                 "New",
-                1500.00,
+                1500L,
                 product,
-                buyer
+                buyer,
+                seller
         );
 
 

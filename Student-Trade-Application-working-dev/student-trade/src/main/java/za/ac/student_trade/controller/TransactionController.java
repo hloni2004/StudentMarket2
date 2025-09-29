@@ -9,6 +9,7 @@ import za.ac.student_trade.service.Impl.TransactionServiceImpl;
 
 import java.io.IOException;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/transaction")
 public class TransactionController {

@@ -15,6 +15,7 @@ public class Transaction {
     @Column(name = "transaction_date")
     private LocalDateTime transactionDate;
 
+    @Lob
     @Column(name = "image_of_product", columnDefinition = "MEDIUMBLOB")
     private byte[] imageOfProduct;
 
@@ -38,6 +39,10 @@ public class Transaction {
     @JoinColumn(name = "buyer_id")
     private Student buyer;
 
+    @ManyToOne
+    @JoinColumn(name = "seller_id")
+    private Student seller;
+
     public Transaction() {
     }
 
@@ -51,6 +56,7 @@ public class Transaction {
         this.price = builder.price;
         this.product = builder.product;
         this.buyer = builder.buyer;
+        this.seller = builder.seller;
     }
 
     public String getTransactionId() {
@@ -89,6 +95,10 @@ public class Transaction {
         return buyer;
     }
 
+    public Student getSeller() {
+        return seller;
+    }
+
     @Override
     public String toString() {
         return "Transaction{" +
@@ -97,6 +107,7 @@ public class Transaction {
                 ", price=" + price +
                 ", product=" + product +
                 ", buyer=" + buyer +
+                ", seller=" + seller +
                 '}';
     }
 
@@ -110,6 +121,7 @@ public class Transaction {
         private double price;
         private Product product;
         private Student buyer;
+        private Student seller;
 
         public Builder setTransactionId(String transactionId) {
             this.transactionId = transactionId;
@@ -156,6 +168,11 @@ public class Transaction {
             return this;
         }
 
+        public Builder setSeller(Student seller) {
+            this.seller = seller;
+            return this;
+        }
+
         public Builder copy(Transaction transaction) {
             this.transactionId = transaction.transactionId;
             this.imageOfProduct = transaction.imageOfProduct;
@@ -166,6 +183,7 @@ public class Transaction {
             this.price = transaction.price;
             this.product = transaction.product;
             this.buyer = transaction.buyer;
+            this.seller = transaction.seller;
             return this;
         }
 
@@ -179,6 +197,7 @@ public class Transaction {
             this.price = transaction.getPrice();
             this.product = transaction.getProduct();
             this.buyer = transaction.getBuyer();
+            this.seller = transaction.getSeller();
             return this;
         }
 

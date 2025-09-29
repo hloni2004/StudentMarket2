@@ -8,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import za.ac.student_trade.domain.Product;
-import za.ac.student_trade.domain.Student;
+import za.ac.student_trade.domain.StripeResponse;
 import za.ac.student_trade.service.Impl.ProductServiceImpl;
-import za.ac.student_trade.service.Impl.StudentServiceImpl;
+import za.ac.student_trade.service.Impl.StripeServiceImpl;
 
 import java.util.List;
 
@@ -60,4 +60,21 @@ public class ProductController {
         productService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    //payment controller
+    @Autowired
+    private StripeServiceImpl stripeService;
+
+    @PostMapping("/checkout/{productId}")
+    public ResponseEntity<StripeResponse> checkoutProduct(@PathVariable Long productId) {
+        // 1️⃣ Fetch the fully populated product from DB
+        Product savedProduct = productService.getProductById(productId);
+
+        // 2️⃣ Call Stripe service with the saved product
+        StripeResponse response = stripeService.checkoutProduct(savedProduct);
+
+        // 3️⃣ Return the response to frontend
+        return ResponseEntity.ok(response);
+    }
+
 }

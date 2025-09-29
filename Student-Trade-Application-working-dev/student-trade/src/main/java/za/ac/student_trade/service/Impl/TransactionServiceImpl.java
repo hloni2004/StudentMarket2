@@ -37,6 +37,8 @@ public class TransactionServiceImpl implements ITransactionService {
 
         Student buyer = studentRepository.findById(buyerId).orElse(null);
 
+        Student seller = productSold.getSeller();
+
         Transaction newTransaction = new Transaction.Builder()
                 .setTransactionId(UUID.randomUUID().toString())
                 .setTransactionDate(LocalDateTime.now())
@@ -47,6 +49,7 @@ public class TransactionServiceImpl implements ITransactionService {
                 .setPrice(productSold.getPrice())
                 .setProduct(productSold)
                 .setBuyer(buyer)
+                .setSeller(seller)
                 .build();
 
         return this.transactionRepository.save(newTransaction);

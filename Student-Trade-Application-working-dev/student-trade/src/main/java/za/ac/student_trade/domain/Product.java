@@ -27,7 +27,10 @@ public class Product {
     private String condition;
 
     @Column(name = "price")
-    private Double price;
+    private Long price;
+
+    @Column(name = "currency")
+    private String currency;
 
     @Column(name = "category")
     private String productCategory;
@@ -41,6 +44,7 @@ public class Product {
 
     @Column(name = "imageName")
     private String imageName;
+
     @Column(name = "imageType")
     private String imageType;
 
@@ -66,6 +70,7 @@ public class Product {
         this.productDescription = builder.productDescription;
         this.condition = builder.condition;
         this.price = builder.price;
+        this.currency = builder.currency;
         this.productCategory = builder.productCategory;
         this.availabilityStatus = builder.availabilityStatus;
         this.imageName = builder.imageName;
@@ -92,7 +97,11 @@ public class Product {
         return condition;
     }
 
-    public Double getPrice() {
+    public String getCurrency() {
+        return currency;
+    }
+
+    public Long getPrice() {
         return price;
     }
 
@@ -134,7 +143,7 @@ public class Product {
                 ", productName='" + productName + '\'' +
                 ", productDescription='" + productDescription + '\'' +
                 ", condition='" + condition + '\'' +
-                ", price=" + price +
+                ", price=" + price + '\'' +
                 ", productCategory=" + productCategory +
                 ", availabilityStatus=" + availabilityStatus +
                 ", releaseDate=" + releaseDate +
@@ -151,7 +160,8 @@ public class Product {
         private String productName;
         private String productDescription;
         private String condition;
-        private Double price;
+        private Long price;
+        private String currency;
         private String productCategory;
         private boolean availabilityStatus;
         private LocalDate releaseDate;
@@ -181,8 +191,13 @@ public class Product {
             return this;
         }
 
-        public Builder setPrice(Double price) {
+        public Builder setPrice(Long price) {
             this.price = price;
+            return this;
+        }
+
+        public Builder setCurrency(String currency) {
+            this.currency = currency;
             return this;
         }
 
@@ -233,6 +248,7 @@ public class Product {
             this.productDescription = product.getProductDescription();
             this.condition = product.getCondition();
             this.price = product.getPrice();
+            this.currency = product.getCurrency();
             this.productCategory = product.getProductCategory();
             this.availabilityStatus = product.isAvailabilityStatus();
             this.releaseDate = product.getReleaseDate();
@@ -250,6 +266,7 @@ public class Product {
             this.productDescription = product.getProductDescription();
             this.condition = product.getCondition();
             this.price = product.getPrice();
+            this.currency = product.getCurrency();
             this.productCategory = product.getProductCategory();
             this.availabilityStatus = product.isAvailabilityStatus();
             this.releaseDate = product.getReleaseDate();
