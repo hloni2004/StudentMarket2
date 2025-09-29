@@ -1,5 +1,7 @@
 package za.ac.student_trade.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -26,10 +28,11 @@ public class Student {
     @JoinColumn(name = "residence_id")
     protected Residence residence;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
     protected List<Product> productForSale;
 
     @OneToMany(mappedBy = "buyer")
+    @JsonManagedReference(value = "buyer-transactions")
     protected List<Transaction> purchases;
 
     protected Student() {}

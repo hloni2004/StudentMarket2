@@ -6,8 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import za.ac.student_trade.domain.Administrator;
 import za.ac.student_trade.domain.Student;
+import za.ac.student_trade.domain.SuperAdmin;
 import za.ac.student_trade.service.Impl.AdministratorServiceImpl;
 import za.ac.student_trade.service.Impl.StudentServiceImpl;
+import za.ac.student_trade.service.Impl.SuperAdminServiceImpl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +22,7 @@ public class StudentController {
 
     private StudentServiceImpl studentService;
     private AdministratorServiceImpl administratorServiceImpl;
+    private SuperAdminServiceImpl superAdminServiceImpl;
 
     @Autowired
     public void setStudentService(StudentServiceImpl studentService) {
@@ -29,6 +32,11 @@ public class StudentController {
     @Autowired
     public void setAdministratorServiceImpl(AdministratorServiceImpl administratorServiceImpl) {
         this.administratorServiceImpl = administratorServiceImpl;
+    }
+
+    @Autowired
+    public void setSuperAdminServiceImpl(SuperAdminServiceImpl superAdminServiceImpl) {
+        this.superAdminServiceImpl = superAdminServiceImpl;
     }
 
     @PostMapping("/create")
@@ -57,17 +65,36 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
-
     @GetMapping("/login")
     public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
         try {
+            // Priority 1: Check SuperAdmin first (highest authority)
+            List<SuperAdmin> superAdmins = superAdminServiceImpl.findByEmailAndPassword(email.trim(), password.trim());
+            if (!superAdmins.isEmpty()) {
+                SuperAdmin superAdmin = superAdmins.get(0);
+
+                Map<String, Object> successResponse = new HashMap<>();
+                successResponse.put("success", true);
+                successResponse.put("message", "Super Admin login successful");
+                successResponse.put("role", "superadmin");
+
+                Map<String, Object> superAdminData = new HashMap<>();
+                superAdminData.put("superAdminId", superAdmin.getSuperAdminId());
+                superAdminData.put("username", superAdmin.getUsername());
+                superAdminData.put("email", superAdmin.getEmail());
+                successResponse.put("data", superAdminData);
+
+                return ResponseEntity.ok(successResponse);
+            }
+
+            // Priority 2: Check Admin
             List<Administrator> admins = administratorServiceImpl.findByEmailAndPassword(email.trim(), password.trim());
             if (!admins.isEmpty()) {
                 Administrator admin = admins.get(0);
 
                 Map<String, Object> successResponse = new HashMap<>();
                 successResponse.put("success", true);
-                successResponse.put("message", "Login successful");
+                successResponse.put("message", "Admin login successful");
                 successResponse.put("role", "admin");
 
                 Map<String, Object> adminData = new HashMap<>();
@@ -79,13 +106,14 @@ public class StudentController {
                 return ResponseEntity.ok(successResponse);
             }
 
+            // Priority 3: Check Student
             List<Student> students = studentService.findByEmailAndPassword(email.trim(), password.trim());
             if (!students.isEmpty()) {
                 Student student = students.get(0);
 
                 Map<String, Object> successResponse = new HashMap<>();
                 successResponse.put("success", true);
-                successResponse.put("message", "Login successful");
+                successResponse.put("message", "Student login successful");
                 successResponse.put("role", "student");
 
                 Map<String, Object> studentData = new HashMap<>();
@@ -98,7 +126,7 @@ public class StudentController {
                 return ResponseEntity.ok(successResponse);
             }
 
-            // Neither found
+            // None found
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
             errorResponse.put("message", "Invalid email or password");

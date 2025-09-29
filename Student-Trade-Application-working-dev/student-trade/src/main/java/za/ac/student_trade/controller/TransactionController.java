@@ -12,23 +12,24 @@ import java.io.IOException;
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/transaction")
+@CrossOrigin(origins = "http://localhost:3000")
 public class TransactionController {
 
-    private TransactionServiceImpl transactionService;
+    private final TransactionServiceImpl transactionService;
 
     @Autowired
     public TransactionController(TransactionServiceImpl transactionService) {
         this.transactionService = transactionService;
     }
 
-    @PostMapping( "/create")
-    public Transaction createTransaction( @RequestParam Long productId,
+    @PostMapping("/create")
+    public Transaction createTransaction(@RequestParam Long productId,
                                          @RequestParam String buyerId) {
-        return this.transactionService.createTransaction(new Transaction(),productId,buyerId);
+        return transactionService.createTransaction(null, productId, buyerId);
     }
 
-    @GetMapping("/read/{id}")
+    @GetMapping("/{id}")  // cleaner REST style
     public Transaction readTransaction(@PathVariable String id) {
-        return this.transactionService.read(id);
+        return transactionService.read(id);
     }
 }
