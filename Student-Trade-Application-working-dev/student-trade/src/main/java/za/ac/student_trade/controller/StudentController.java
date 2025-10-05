@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import za.ac.student_trade.domain.Administrator;
 import za.ac.student_trade.domain.Student;
 import za.ac.student_trade.domain.SuperAdmin;
@@ -11,6 +12,7 @@ import za.ac.student_trade.service.Impl.AdministratorServiceImpl;
 import za.ac.student_trade.service.Impl.StudentServiceImpl;
 import za.ac.student_trade.service.Impl.SuperAdminServiceImpl;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,9 +42,10 @@ public class StudentController {
     }
 
     @PostMapping("/create")
-    public Student createStudent(@RequestBody Student student) {
-        return this.studentService.create(student);
+    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+        return ResponseEntity.ok(studentService.create(student));
     }
+
 
     @GetMapping("/read/{id}")
     public Student read(@PathVariable String id) {
@@ -52,6 +55,17 @@ public class StudentController {
     @PutMapping("/update")
     public Student update(@RequestBody Student student) {
         return this.studentService.update(student);
+    }
+
+
+    @PatchMapping(value = "/update/{id}", consumes = { "multipart/form-data" })
+    public ResponseEntity<Student> updateStudent(
+            @PathVariable("id") String studentId,
+            @RequestPart("student") Student studentRequest,
+            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage
+    ) throws IOException {
+        Student updated = studentService.updateStudent(studentId, studentRequest, profileImage);
+        return ResponseEntity.ok(updated);
     }
 
     @GetMapping("/getAll")
