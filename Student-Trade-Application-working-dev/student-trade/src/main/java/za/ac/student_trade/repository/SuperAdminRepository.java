@@ -12,4 +12,7 @@ public interface SuperAdminRepository extends JpaRepository<SuperAdmin, Long> {
     Optional<SuperAdmin> findByUsername(String username);
     List<SuperAdmin> findByEmailAndPassword(String email, String password);
     boolean existsByUsername(String username);
+    boolean existsByEmail(String email);
+
+
 }
