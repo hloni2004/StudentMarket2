@@ -1,5 +1,6 @@
 package za.ac.student_trade.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -7,7 +8,8 @@ import java.util.List;
 @Table(name = "student")
 public class Student {
 
-    @Id @Column(name = "student_id")
+    @Id
+    @Column(name = "student_id")
     protected String studentId;
 
     @Column(name = "first_name", nullable = false)
@@ -26,11 +28,18 @@ public class Student {
     @JoinColumn(name = "residence_id")
     protected Residence residence;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     protected List<Product> productForSale;
 
     @OneToMany(mappedBy = "buyer")
+    @JsonIgnore
     protected List<Transaction> purchases;
+
+    // ✅ New field: optional profile image
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] profileImage;
 
     protected Student() {}
 
@@ -43,39 +52,19 @@ public class Student {
         this.residence = builder.residence;
         this.productForSale = builder.productForSale;
         this.purchases = builder.purchases;
+        this.profileImage = builder.profileImage;
     }
 
-    public String getStudentId() {
-        return studentId;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public Residence getResidence() {
-        return residence;
-    }
-
-    public List<Product> getProductForSale() {
-        return productForSale;
-    }
-
-    public List<Transaction> getPurchases() {
-        return purchases;
-    }
+    // --- Getters ---
+    public String getStudentId() { return studentId; }
+    public String getFirstName() { return firstName; }
+    public String getLastName() { return lastName; }
+    public String getEmail() { return email; }
+    public String getPassword() { return password; }
+    public Residence getResidence() { return residence; }
+    public List<Product> getProductForSale() { return productForSale; }
+    public List<Transaction> getPurchases() { return purchases; }
+    public byte[] getProfileImage() { return profileImage; }
 
     @Override
     public String toString() {
@@ -86,9 +75,7 @@ public class Student {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", residence=" + residence +
-                ", productForSale=" + productForSale +
-                ", purchases=" + purchases +
-                '}';
+                '}'; // not logging products/images for safety
     }
 
     public static class Builder {
@@ -100,46 +87,17 @@ public class Student {
         private Residence residence;
         private List<Product> productForSale;
         private List<Transaction> purchases;
+        private byte[] profileImage;
 
-        public Builder setStudentId(String studentId) {
-            this.studentId = studentId;
-            return this;
-        }
-
-        public Builder setFirstName(String firstName) {
-            this.firstName = firstName;
-            return this;
-        }
-
-        public Builder setLastName(String lastName) {
-            this.lastName = lastName;
-            return this;
-        }
-
-        public Builder setEmail(String email) {
-            this.email = email;
-            return this;
-        }
-
-        public Builder setPassword(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public Builder setResidence(Residence residence) {
-            this.residence = residence;
-            return this;
-        }
-
-        public Builder setProductForSale(List<Product> productForSale) {
-            this.productForSale = productForSale;
-            return this;
-        }
-
-        public Builder setPurchases(List<Transaction> purchases) {
-            this.purchases = purchases;
-            return this;
-        }
+        public Builder setStudentId(String studentId) { this.studentId = studentId; return this; }
+        public Builder setFirstName(String firstName) { this.firstName = firstName; return this; }
+        public Builder setLastName(String lastName) { this.lastName = lastName; return this; }
+        public Builder setEmail(String email) { this.email = email; return this; }
+        public Builder setPassword(String password) { this.password = password; return this; }
+        public Builder setResidence(Residence residence) { this.residence = residence; return this; }
+        public Builder setProductForSale(List<Product> productForSale) { this.productForSale = productForSale; return this; }
+        public Builder setPurchases(List<Transaction> purchases) { this.purchases = purchases; return this; }
+        public Builder setProfileImage(byte[] profileImage) { this.profileImage = profileImage; return this; }
 
         public Builder copy(Student student) {
             this.studentId = student.studentId;
@@ -150,11 +108,10 @@ public class Student {
             this.residence = student.getResidence();
             this.productForSale = student.getProductForSale();
             this.purchases = student.getPurchases();
+            this.profileImage = student.getProfileImage();
             return this;
         }
 
-        public Student build() {
-            return new Student(this);
-        }
+        public Student build() { return new Student(this); }
     }
 }

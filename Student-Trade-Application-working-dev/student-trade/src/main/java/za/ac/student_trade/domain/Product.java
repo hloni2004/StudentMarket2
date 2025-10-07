@@ -1,6 +1,7 @@
 package za.ac.student_trade.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
@@ -27,7 +28,10 @@ public class Product {
     private String condition;
 
     @Column(name = "price")
-    private Double price;
+    private Long price;
+
+    @Column(name = "currency")
+    private String currency;
 
     @Column(name = "category")
     private String productCategory;
@@ -41,6 +45,7 @@ public class Product {
 
     @Column(name = "imageName")
     private String imageName;
+
     @Column(name = "imageType")
     private String imageType;
 
@@ -48,13 +53,13 @@ public class Product {
     @Column(name = "imageData", columnDefinition = "MEDIUMBLOB")
     private byte[] imageData;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "seller_id", nullable = false)
     @JsonIgnoreProperties({"productForSale", "purchases"})
     private Student seller;
 
     @OneToOne(mappedBy = "product")
-    @JsonIgnoreProperties("product")
+    @JsonIgnore // ADDED: Break circular reference
     private Transaction transaction;
 
     public Product() {
@@ -66,6 +71,7 @@ public class Product {
         this.productDescription = builder.productDescription;
         this.condition = builder.condition;
         this.price = builder.price;
+        this.currency = builder.currency;
         this.productCategory = builder.productCategory;
         this.availabilityStatus = builder.availabilityStatus;
         this.imageName = builder.imageName;
@@ -92,7 +98,11 @@ public class Product {
         return condition;
     }
 
-    public Double getPrice() {
+    public String getCurrency() {
+        return currency;
+    }
+
+    public Long getPrice() {
         return price;
     }
 
@@ -119,6 +129,7 @@ public class Product {
     public String getImageName() {
         return imageName;
     }
+
     public String getImageType() {
         return imageType;
     }
@@ -134,7 +145,7 @@ public class Product {
                 ", productName='" + productName + '\'' +
                 ", productDescription='" + productDescription + '\'' +
                 ", condition='" + condition + '\'' +
-                ", price=" + price +
+                ", price=" + price + '\'' +
                 ", productCategory=" + productCategory +
                 ", availabilityStatus=" + availabilityStatus +
                 ", releaseDate=" + releaseDate +
@@ -142,8 +153,7 @@ public class Product {
                 ", imageType='" + imageType + '\'' +
                 ", imageDate=" + Arrays.toString(imageData) + '\'' +
                 ", seller=" + seller +
-                ", transaction=" + transaction +
-                '}';
+                '}'; // Removed transaction from toString to avoid circular reference
     }
 
     public static class Builder {
@@ -151,7 +161,8 @@ public class Product {
         private String productName;
         private String productDescription;
         private String condition;
-        private Double price;
+        private Long price;
+        private String currency;
         private String productCategory;
         private boolean availabilityStatus;
         private LocalDate releaseDate;
@@ -181,8 +192,13 @@ public class Product {
             return this;
         }
 
-        public Builder setPrice(Double price) {
+        public Builder setPrice(Long price) {
             this.price = price;
+            return this;
+        }
+
+        public Builder setCurrency(String currency) {
+            this.currency = currency;
             return this;
         }
 
@@ -233,6 +249,7 @@ public class Product {
             this.productDescription = product.getProductDescription();
             this.condition = product.getCondition();
             this.price = product.getPrice();
+            this.currency = product.getCurrency();
             this.productCategory = product.getProductCategory();
             this.availabilityStatus = product.isAvailabilityStatus();
             this.releaseDate = product.getReleaseDate();
@@ -250,6 +267,7 @@ public class Product {
             this.productDescription = product.getProductDescription();
             this.condition = product.getCondition();
             this.price = product.getPrice();
+            this.currency = product.getCurrency();
             this.productCategory = product.getProductCategory();
             this.availabilityStatus = product.isAvailabilityStatus();
             this.releaseDate = product.getReleaseDate();

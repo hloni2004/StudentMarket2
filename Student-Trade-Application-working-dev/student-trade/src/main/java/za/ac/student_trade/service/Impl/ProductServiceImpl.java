@@ -30,6 +30,7 @@ public class ProductServiceImpl implements IProductService {
                         product.getProductDescription(),
                         product.getCondition(),
                         product.getPrice(),
+                        product.getCurrency(),
                         product.getProductCategory(),
                         product.isAvailabilityStatus(),
                         imageFile.getOriginalFilename(),

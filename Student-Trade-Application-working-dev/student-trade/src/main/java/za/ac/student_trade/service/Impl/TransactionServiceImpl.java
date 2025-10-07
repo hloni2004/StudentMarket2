@@ -2,56 +2,92 @@ package za.ac.student_trade.service.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 import za.ac.student_trade.domain.Product;
 import za.ac.student_trade.domain.Student;
 import za.ac.student_trade.domain.Transaction;
 import za.ac.student_trade.repository.ProductRepository;
 import za.ac.student_trade.repository.StudentRepository;
 import za.ac.student_trade.repository.TransactionRepository;
+import za.ac.student_trade.service.EmailService;
 import za.ac.student_trade.service.ITransactionService;
 
-import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class TransactionServiceImpl implements ITransactionService {
 
-    private TransactionRepository transactionRepository;
-    private ProductRepository productRepository;
-    private StudentRepository studentRepository;
+    private final TransactionRepository transactionRepository;
+    private final ProductRepository productRepository;
+    private final StudentRepository studentRepository;
 
     @Autowired
-    public TransactionServiceImpl(TransactionRepository transactionRepository, ProductRepository productRepository, StudentRepository studentRepository) {
+    private EmailService emailService;
+
+    @Autowired
+    public TransactionServiceImpl(TransactionRepository transactionRepository,
+                                  ProductRepository productRepository,
+                                  StudentRepository studentRepository) {
         this.transactionRepository = transactionRepository;
         this.productRepository = productRepository;
         this.studentRepository = studentRepository;
     }
 
     @Override
+    @Transactional
     public Transaction createTransaction(Transaction transaction, Long productSoldId, String buyerId) {
+        Product productSold = productRepository.findById(productSoldId)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + productSoldId));
 
-        Product productSold = productRepository.findById(productSoldId).orElse(null);
+        Student buyer = studentRepository.findById(buyerId)
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + buyerId));
 
-        Student buyer = studentRepository.findById(buyerId).orElse(null);
+        Student seller = productSold.getSeller();
 
         Transaction newTransaction = new Transaction.Builder()
-                .setTransactionId(UUID.randomUUID().toString())
-                .setTransactionDate(LocalDateTime.now())
-                .setImageOfProduct(productSold.getImageData())
-                .setProductLabel(productSold.getProductName())
-                .setProductDescription(productSold.getProductDescription())
-                .setProductCondition(productSold.getCondition())
                 .setPrice(productSold.getPrice())
                 .setProduct(productSold)
+                .setProductLabel(productSold.getProductName())
+                .setImageOfProduct(productSold.getImageData())
+                .setProductCondition(productSold.getCondition())
+                .setProductDescription(productSold.getProductDescription())
                 .setBuyer(buyer)
+                .setSeller(seller)
                 .build();
 
-        return this.transactionRepository.save(newTransaction);
+        Transaction savedTransaction = transactionRepository.save(newTransaction);
+
+        // Send email notifications
+        try {
+            // Notify seller
+            emailService.sendPurchaseNotification(
+                    seller.getEmail(),
+                    productSold.getProductName(),
+                    productSold.getPrice(),
+                    buyer.getFirstName() + " " + buyer.getLastName(),
+                    buyer.getEmail(),
+                    productSold.getImageData(),   // <-- send product image
+                    productSold.getImageType()    // <-- e.g. "image/jpeg" or "image/png"
+            );
+
+            // Confirm purchase to buyer
+            emailService.sendPurchaseConfirmation(
+                    buyer.getEmail(),
+                    productSold.getProductName(),
+                    productSold.getPrice(),
+                    seller.getFirstName() + " " + seller.getLastName(),
+                    seller.getEmail(),
+                    productSold.getImageData(),   // <-- send product image
+                    productSold.getImageType()
+            );
+        } catch (Exception e) {
+            System.err.println("Failed to send email notifications: " + e.getMessage());
+        }
+
+        return savedTransaction;
     }
 
+    // Other methods...
     @Override
     public Transaction create(Transaction transaction) {
         return transactionRepository.save(transaction);
@@ -59,7 +95,8 @@ public class TransactionServiceImpl implements ITransactionService {
 
     @Override
     public Transaction read(String id) {
-        return transactionRepository.findById(id).get();
+        return transactionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transaction not found with id: " + id));
     }
 
     @Override
@@ -68,8 +105,7 @@ public class TransactionServiceImpl implements ITransactionService {
     }
 
     @Override
-    public List<Transaction> getAll(){
+    public List<Transaction> getAll() {
         return transactionRepository.findAll();
-    };
-
+    }
 }

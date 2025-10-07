@@ -4,22 +4,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import za.ac.student_trade.domain.Administrator;
 import za.ac.student_trade.domain.Student;
+import za.ac.student_trade.domain.SuperAdmin;
 import za.ac.student_trade.service.Impl.AdministratorServiceImpl;
 import za.ac.student_trade.service.Impl.StudentServiceImpl;
+import za.ac.student_trade.service.Impl.SuperAdminServiceImpl;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/student")
+@RequestMapping("api/student")
 public class StudentController {
 
     private StudentServiceImpl studentService;
     private AdministratorServiceImpl administratorServiceImpl;
+    private SuperAdminServiceImpl superAdminServiceImpl;
 
     @Autowired
     public void setStudentService(StudentServiceImpl studentService) {
@@ -31,10 +36,16 @@ public class StudentController {
         this.administratorServiceImpl = administratorServiceImpl;
     }
 
-    @PostMapping("/create")
-    public Student createStudent(@RequestBody Student student) {
-        return this.studentService.create(student);
+    @Autowired
+    public void setSuperAdminServiceImpl(SuperAdminServiceImpl superAdminServiceImpl) {
+        this.superAdminServiceImpl = superAdminServiceImpl;
     }
+
+    @PostMapping("/create")
+    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
+        return ResponseEntity.ok(studentService.create(student));
+    }
+
 
     @GetMapping("/read/{id}")
     public Student read(@PathVariable String id) {
@@ -44,6 +55,17 @@ public class StudentController {
     @PutMapping("/update")
     public Student update(@RequestBody Student student) {
         return this.studentService.update(student);
+    }
+
+
+    @PatchMapping(value = "/update/{id}", consumes = { "multipart/form-data" })
+    public ResponseEntity<Student> updateStudent(
+            @PathVariable("id") String studentId,
+            @RequestPart("student") Student studentRequest,
+            @RequestPart(value = "profileImage", required = false) MultipartFile profileImage
+    ) throws IOException {
+        Student updated = studentService.updateStudent(studentId, studentRequest, profileImage);
+        return ResponseEntity.ok(updated);
     }
 
     @GetMapping("/getAll")
@@ -57,17 +79,35 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
-
     @GetMapping("/login")
     public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
         try {
-            List<Administrator> admins = administratorServiceImpl.findByEmailAndPassword(email.trim(), password.trim());
-            if (!admins.isEmpty()) {
-                Administrator admin = admins.get(0);
+            // Priority 1: Check SuperAdmin first (highest authority)
+            List<SuperAdmin> superAdmins = superAdminServiceImpl.findByEmailAndPassword(email.trim(), password.trim());
+            if (!superAdmins.isEmpty()) {
+                SuperAdmin superAdmin = superAdmins.get(0);
 
                 Map<String, Object> successResponse = new HashMap<>();
                 successResponse.put("success", true);
-                successResponse.put("message", "Login successful");
+                successResponse.put("message", "Super Admin login successful");
+                successResponse.put("role", "superadmin");
+
+                Map<String, Object> superAdminData = new HashMap<>();
+                superAdminData.put("superAdminId", superAdmin.getSuperAdminId());
+                superAdminData.put("username", superAdmin.getUsername());
+                superAdminData.put("email", superAdmin.getEmail());
+                successResponse.put("data", superAdminData);
+
+                return ResponseEntity.ok(successResponse);
+            }
+
+            // Priority 2: Check Admin
+            List<Administrator> admins = administratorServiceImpl.findByEmailAndPassword(email.trim(), password.trim());
+            if (!admins.isEmpty()) {
+                Administrator admin = admins.get(0);
+                Map<String, Object> successResponse = new HashMap<>();
+                successResponse.put("success", true);
+                successResponse.put("message", "Admin login successful");
                 successResponse.put("role", "admin");
 
                 Map<String, Object> adminData = new HashMap<>();
@@ -79,13 +119,14 @@ public class StudentController {
                 return ResponseEntity.ok(successResponse);
             }
 
+            // Priority 3: Check Student
             List<Student> students = studentService.findByEmailAndPassword(email.trim(), password.trim());
             if (!students.isEmpty()) {
                 Student student = students.get(0);
 
                 Map<String, Object> successResponse = new HashMap<>();
                 successResponse.put("success", true);
-                successResponse.put("message", "Login successful");
+                successResponse.put("message", "Student login successful");
                 successResponse.put("role", "student");
 
                 Map<String, Object> studentData = new HashMap<>();
@@ -98,7 +139,7 @@ public class StudentController {
                 return ResponseEntity.ok(successResponse);
             }
 
-            // Neither found
+            // None found
             Map<String, Object> errorResponse = new HashMap<>();
             errorResponse.put("success", false);
             errorResponse.put("message", "Invalid email or password");

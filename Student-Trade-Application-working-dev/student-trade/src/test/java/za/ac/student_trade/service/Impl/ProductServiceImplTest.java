@@ -61,7 +61,7 @@ class ProductServiceImplTest {
                 .setProductName("MacBook Pro")
                 .setProductDescription("Latest MacBook Pro with M2 chip")
                 .setCondition("New")
-                .setPrice(2499.99)
+                .setPrice(249999L)
                 .setProductCategory("Laptop")
                 .setAvailabilityStatus(true)
                 .setSeller(seller)
@@ -87,7 +87,7 @@ class ProductServiceImplTest {
                 .setProductName("MacBook Pro")
                 .setProductDescription("Latest MacBook Pro with M2 chip")
                 .setCondition("New")
-                .setPrice(2499.99)
+                .setPrice(249999L)
                 .setProductCategory("Laptop")
                 .setAvailabilityStatus(true)
                 .build();
@@ -120,13 +120,13 @@ class ProductServiceImplTest {
         Product updatedProduct = new Product.Builder()
                 .copy(product)
                 .setProductName("MacBook Pro Updated")
-                .setPrice(2299.99)
+                .setPrice(229999L)
                 .build();
 
         Product result = productService.update(updatedProduct);
         assertNotNull(result);
         assertEquals("MacBook Pro Updated", result.getProductName());
-        assertEquals(2299.99, result.getPrice());
+        assertEquals(229999L, result.getPrice());
 
         product = result;
         //  System.out.println("Updated product: " + product);
