@@ -9,7 +9,7 @@ import za.ac.student_trade.domain.Transaction;
 import za.ac.student_trade.repository.ProductRepository;
 import za.ac.student_trade.repository.StudentRepository;
 import za.ac.student_trade.repository.TransactionRepository;
-import za.ac.student_trade.service.EmailService;
+import za.ac.student_trade.service.Impl.EmailService;
 import za.ac.student_trade.service.ITransactionService;
 
 import java.util.List;
@@ -36,6 +36,7 @@ public class TransactionServiceImpl implements ITransactionService {
     @Override
     @Transactional
     public Transaction createTransaction(Transaction transaction, Long productSoldId, String buyerId) {
+        // Fetch product and buyer
         Product productSold = productRepository.findById(productSoldId)
                 .orElseThrow(() -> new RuntimeException("Product not found with id: " + productSoldId));
 
@@ -44,6 +45,7 @@ public class TransactionServiceImpl implements ITransactionService {
 
         Student seller = productSold.getSeller();
 
+        // Create transaction with all product details
         Transaction newTransaction = new Transaction.Builder()
                 .setPrice(productSold.getPrice())
                 .setProduct(productSold)
@@ -53,41 +55,40 @@ public class TransactionServiceImpl implements ITransactionService {
                 .setProductDescription(productSold.getProductDescription())
                 .setBuyer(buyer)
                 .setSeller(seller)
+                .setStatus(Transaction.TransactionStatus.COMPLETED)
                 .build();
 
+        // Save transaction
         Transaction savedTransaction = transactionRepository.save(newTransaction);
 
-        // Send email notifications
-        try {
-            // Notify seller
-            emailService.sendPurchaseNotification(
-                    seller.getEmail(),
-                    productSold.getProductName(),
-                    productSold.getPrice(),
-                    buyer.getFirstName() + " " + buyer.getLastName(),
-                    buyer.getEmail(),
-                    productSold.getImageData(),   // <-- send product image
-                    productSold.getImageType()    // <-- e.g. "image/jpeg" or "image/png"
-            );
+        // Mark product as unavailable
+        Product updatedProduct = new Product.Builder()
+                .copy(productSold)
+                .setAvailabilityStatus(false)
+                .build();
+        productRepository.save(updatedProduct);
 
-            // Confirm purchase to buyer
-            emailService.sendPurchaseConfirmation(
-                    buyer.getEmail(),
-                    productSold.getProductName(),
-                    productSold.getPrice(),
-                    seller.getFirstName() + " " + seller.getLastName(),
-                    seller.getEmail(),
-                    productSold.getImageData(),   // <-- send product image
-                    productSold.getImageType()
-            );
+        // Send professional invoice emails with PDF attachments
+        try {
+            System.out.println("📧 Sending invoice emails...");
+
+            // Send invoice to seller
+            emailService.sendSellerInvoice(savedTransaction);
+            System.out.println("✅ Seller invoice sent to: " + seller.getEmail());
+
+            // Send invoice to buyer
+            emailService.sendBuyerInvoice(savedTransaction);
+            System.out.println("✅ Buyer invoice sent to: " + buyer.getEmail());
+
         } catch (Exception e) {
-            System.err.println("Failed to send email notifications: " + e.getMessage());
+            System.err.println("❌ Failed to send email notifications: " + e.getMessage());
+            e.printStackTrace();
+            // Don't fail the transaction if email fails
         }
 
         return savedTransaction;
     }
 
-    // Other methods...
     @Override
     public Transaction create(Transaction transaction) {
         return transactionRepository.save(transaction);
