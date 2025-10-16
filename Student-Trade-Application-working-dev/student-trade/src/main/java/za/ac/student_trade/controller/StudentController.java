@@ -3,11 +3,15 @@ package za.ac.student_trade.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import za.ac.student_trade.domain.Administrator;
 import za.ac.student_trade.domain.Student;
 import za.ac.student_trade.domain.SuperAdmin;
+import za.ac.student_trade.config.CustomUserPrincipal;
 import za.ac.student_trade.service.Impl.AdministratorServiceImpl;
 import za.ac.student_trade.service.Impl.StudentServiceImpl;
 import za.ac.student_trade.service.Impl.SuperAdminServiceImpl;
@@ -48,17 +52,19 @@ public class StudentController {
 
 
     @GetMapping("/read/{id}")
+    @PreAuthorize("hasRole('STUDENT') and #id == authentication.principal.userId or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
     public Student read(@PathVariable String id) {
         return this.studentService.read(id);
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasRole('STUDENT') and #student.studentId == authentication.principal.userId or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
     public Student update(@RequestBody Student student) {
         return this.studentService.update(student);
     }
 
-
     @PatchMapping(value = "/update/{id}", consumes = { "multipart/form-data" })
+    @PreAuthorize("hasRole('STUDENT') and #studentId == authentication.principal.userId or hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
     public ResponseEntity<Student> updateStudent(
             @PathVariable("id") String studentId,
             @RequestPart("student") Student studentRequest,
@@ -69,14 +75,41 @@ public class StudentController {
     }
 
     @GetMapping("/getAll")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
     public List<Student> getAll() {
         return this.studentService.getAll();
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('SUPER_ADMIN')")
     public ResponseEntity<Void> deleteStudent(@PathVariable String id) {
         studentService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    // Get current student profile (for authenticated student)
+    @GetMapping("/profile")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<?> getCurrentStudentProfile() {
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            CustomUserPrincipal userPrincipal = (CustomUserPrincipal) auth.getPrincipal();
+            String studentId = userPrincipal.getUserId();
+            
+            Student student = studentService.read(studentId);
+            if (student == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("success", false, "message", "Student not found"));
+            }
+            
+            return ResponseEntity.ok(Map.of(
+                "success", true,
+                "data", student
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("success", false, "message", "Error retrieving profile: " + e.getMessage()));
+        }
     }
 
     @GetMapping("/login")
