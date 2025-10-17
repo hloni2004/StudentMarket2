@@ -47,6 +47,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authz -> authz
                 // Public endpoints - Authentication/Login (Read-only or initial auth)
                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/student/forgot-password/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth/register/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/product/getAllProducts").permitAll()
                 

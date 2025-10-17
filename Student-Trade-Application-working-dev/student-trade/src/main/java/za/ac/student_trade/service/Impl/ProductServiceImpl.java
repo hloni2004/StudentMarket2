@@ -65,11 +65,11 @@ public class ProductServiceImpl implements IProductService {
 
     @Override
     public List<Product> getAll() {
-        return productRepository.findAll();
+        return productRepository.findAvailableProducts();
     }
+
     @Override
     public void delete(Long productId) {
         productRepository.deleteById(productId);
     }
-
 }

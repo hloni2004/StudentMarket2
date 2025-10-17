@@ -1,5 +1,7 @@
 package za.ac.student_trade.service.Impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import za.ac.student_trade.domain.Residence;
@@ -19,6 +21,10 @@ public class StudentServiceImpl implements IStudentService {
     private final StudentRepository studentRepository;
     private final ResidenceRepository residenceRepository;
     private final EmailService emailService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     // Temporary store for OTPs
     private final Map<String, String> otpStore = new HashMap<>();
@@ -146,7 +152,9 @@ public class StudentServiceImpl implements IStudentService {
         Student student = studentRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Student not found."));
 
-        student = new Student.Builder().copy(student).setPassword(newPassword).build();
+        String encodedPassword = passwordEncoder.encode(newPassword);
+
+        student = new Student.Builder().copy(student).setPassword(encodedPassword).build();
         studentRepository.save(student);
 
         otpStore.remove(email);

@@ -138,9 +138,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if ("GET".equals(method) && READ_ONLY_ENDPOINTS.stream().anyMatch(requestURI::startsWith)) {
             return true;
         }
-        
-        return requestURI.startsWith("/api/auth/") || 
-               (requestURI.equals("/api/product/getAllProducts") && "GET".equals(method));
+
+        return requestURI.startsWith("/api/auth/") ||
+                requestURI.startsWith("/api/student/forgot-password/send-otp") ||
+                requestURI.startsWith("/api/student/forgot-password/reset") ||
+                (requestURI.equals("/api/product/getAllProducts") && "GET".equals(method));
     }
 
     private boolean isAuthorizedForSensitiveOperation(String requestURI, String method, Role role) {
