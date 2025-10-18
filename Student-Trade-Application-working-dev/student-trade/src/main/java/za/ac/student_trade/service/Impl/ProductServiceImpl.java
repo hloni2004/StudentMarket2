@@ -67,9 +67,46 @@ public class ProductServiceImpl implements IProductService {
     public List<Product> getAll() {
         return productRepository.findAll();
     }
+    public List<Product> getAvailableProductsByStudent(String studentId) {
+        return productRepository.findBySellerStudentIdAndAvailabilityStatusTrue(studentId);
+    }
+
+
+
     @Override
     public void delete(Long productId) {
         productRepository.deleteById(productId);
     }
+
+    public List<Product> getSoldProductsByStudent(String studentId) {
+        return productRepository.findBySellerStudentIdAndAvailabilityStatusFalse(studentId);
+    }
+    @Override
+    public Product updateProductWithImage(Product updatedProduct, MultipartFile imageFile) throws IOException {
+        // 1. Get the existing product from the database
+        Product existingProduct = productRepository.findById(updatedProduct.getProductId())
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        // 2. Use the Builder to copy the existing product, ensuring all fields are present
+        Product.Builder builder = new Product.Builder().copy(existingProduct);
+
+        // 3. Apply changes from the updatedProduct DTO
+        builder.setProductName(updatedProduct.getProductName())
+                .setProductDescription(updatedProduct.getProductDescription())
+                .setPrice(updatedProduct.getPrice());
+
+
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            builder.setImageName(imageFile.getOriginalFilename())
+                    .setImageType(imageFile.getContentType())
+                    .setImageData(imageFile.getBytes());
+        }
+        Product finalProduct = builder.build();
+        return productRepository.save(finalProduct);
+    }
+
+
+
 
 }
